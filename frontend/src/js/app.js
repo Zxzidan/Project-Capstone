@@ -119,8 +119,8 @@ export const app = {
       // Update DOM
       const balanceEl = document.getElementById('totalBalance');
       const spendingEl = document.getElementById('monthlySpending');
-      if (balanceEl) balanceEl.textContent = '$' + balance.toFixed(2);
-      if (spendingEl) spendingEl.textContent = '$' + monthlySpending.toFixed(2);
+      if (balanceEl) balanceEl.textContent = 'Rp ' + balance.toLocaleString('id-ID');
+      if (spendingEl) spendingEl.textContent = 'Rp ' + monthlySpending.toLocaleString('id-ID');
 
       // Render transactions
       const txList = document.getElementById('transactionList');
@@ -143,7 +143,7 @@ export const app = {
                 </div>
               </div>
               <div class="font-bold ${isIncome ? 'text-success' : 'text-danger'}">
-                ${isIncome ? '+' : '-'}$${t.amount.toFixed(2)}
+                ${isIncome ? '+' : '-'}Rp ${t.amount.toLocaleString('id-ID')}
               </div>
             </div>
           `;

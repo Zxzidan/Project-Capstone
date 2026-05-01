@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>FinTrack AI - Add Transaction</title>
+    <title>Finova AI - Add Transaction</title>
     <link rel="stylesheet" href="/css/index.css" />
     <style>
       .mobile-layout {
@@ -101,8 +101,8 @@
       <form id="addTxForm">
         <div class="text-center text-secondary mt-6">How much?</div>
         <div style="position: relative; display: flex; justify-content: center; align-items: center;">
-          <span style="font-size: 2rem; position: absolute; left: 20%; color: var(--color-text-muted);">$</span>
-          <input type="number" name="amount" class="amount-input" placeholder="0.00" step="0.01" required />
+          <span style="font-size: 2rem; position: absolute; left: 15%; color: var(--color-text-muted);">Rp</span>
+          <input type="number" name="amount" class="amount-input" placeholder="0" step="1" required />
         </div>
 
       <!-- Details Form -->
@@ -135,9 +135,18 @@
           <input type="text" name="notes" class="form-control" placeholder="What was this for?" />
         </div>
         
-        <div class="form-group mb-8">
+        <div class="form-group mb-4">
           <label class="form-label">Date</label>
           <input type="date" name="date" class="form-control" value="2026-05-01" required />
+        </div>
+
+        <div class="form-group mb-8">
+          <label class="form-label">Scan Struk / Receipt (AI Auto-fill)</label>
+          <label class="scan-wrapper" style="display: block; border: 1px dashed var(--color-primary); padding: 1rem; text-align: center; border-radius: var(--radius-md); cursor: pointer; background: rgba(59, 130, 246, 0.05); transition: all 0.3s;">
+            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">📸</div>
+            <div style="color: var(--color-primary); font-size: 0.875rem; font-weight: 500;">Tap to Scan Receipt</div>
+            <input type="file" accept="image/*" capture="environment" style="display: none;" id="receiptInput" onchange="alert('Receipt scanning AI is processing...')" />
+          </label>
         </div>
 
         <button type="submit" class="btn btn-primary w-full" style="width: 100%; padding: 1rem; border:none; border-radius: var(--radius-full);">

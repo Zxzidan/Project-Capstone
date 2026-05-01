@@ -1,7 +1,7 @@
 {
-  "name": "fintrack-backend",
+  "name": "finova-backend",
   "version": "1.0.0",
-  "description": "RESTful API for FinTrack",
+  "description": "RESTful API for Finova",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

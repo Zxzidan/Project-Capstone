@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FinTrack AI - Add Transaction</title>
+    <title>Finova AI - Add Transaction</title>
     <link rel="stylesheet" href="/css/index.css" />
     <style>
       .transaction-form-card {
@@ -39,7 +39,7 @@
       <!-- Sidebar Navigation -->
       <aside class="sidebar">
         <div class="sidebar-header">
-          <h2 class="text-xl font-bold"><span class="text-gradient">FinTrack</span> AI</h2>
+          <h2 class="text-xl font-bold"><span class="text-gradient">Finova</span> AI</h2>
         </div>
         <nav class="sidebar-nav">
           <a href="/pages/desktop/dashboard.html" class="nav-item">💻 Dashboard</a>
@@ -59,8 +59,8 @@
             <div class="form-group">
               <label class="form-label">Amount</label>
               <div class="amount-wrapper">
-                <span>$</span>
-                <input type="number" name="amount" step="0.01" placeholder="0.00" required />
+                <span>Rp</span>
+                <input type="number" name="amount" step="1" placeholder="0" required />
               </div>
             </div>
 
@@ -91,9 +91,19 @@
               </select>
             </div>
 
-            <div class="form-group mb-8">
+            <div class="form-group mb-6">
               <label class="form-label">Notes (Optional)</label>
               <textarea name="notes" class="form-control" rows="3" placeholder="What was this transaction for?"></textarea>
+            </div>
+
+            <div class="form-group mb-8">
+              <label class="form-label">Scan Struk / Receipt (AI Auto-fill)</label>
+              <label class="scan-wrapper" style="display: block; border: 1px dashed var(--color-primary); padding: 1.5rem; text-align: center; border-radius: var(--radius-md); cursor: pointer; background: rgba(59, 130, 246, 0.05); transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📸</div>
+                <div style="color: var(--color-primary); font-size: 1rem; font-weight: 500;">Click to Upload or Scan Receipt</div>
+                <div style="color: var(--color-text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">Supported formats: JPEG, PNG, PDF</div>
+                <input type="file" accept="image/*,.pdf" style="display: none;" id="receiptInput" onchange="alert('Receipt scanning AI is processing...')" />
+              </label>
             </div>
 
             <div class="flex justify-end gap-4">
