@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>FinTrack AI - Add Transaction</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .mobile-layout {
+        max-width: 480px;
+        margin: 0 auto;
+        min-height: 100vh;
+        background: var(--color-bg);
+        position: relative;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+      
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-4);
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .amount-input {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 3rem;
+        font-weight: 700;
+        text-align: center;
+        width: 100%;
+        outline: none;
+        padding: var(--spacing-6) 0;
+      }
+      
+      .amount-input::placeholder {
+        color: rgba(255,255,255,0.3);
+      }
+      
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-3);
+        margin-bottom: var(--spacing-6);
+      }
+      
+      .category-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+      
+      .cat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        transition: all var(--transition-fast);
+      }
+      
+      .category-item.active .cat-icon {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+      }
+      
+      .cat-label {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        text-align: center;
+      }
+      
+      .form-section {
+        background: var(--glass-bg);
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        padding: var(--spacing-6);
+        min-height: 50vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-layout animate-fade-in">
+      
+      <!-- Header -->
+      <header class="mobile-header">
+        <a href="/pages/mobile/dashboard.html" class="avatar" style="background: transparent; border: 1px solid var(--border-color); width: 36px; height: 36px;">✕</a>
+        <h3 style="margin: 0;">Add Expense</h3>
+        <div style="width: 36px;"></div> <!-- Spacer -->
+      </header>
+
+      <!-- Amount -->
+      <form id="addTxForm">
+        <div class="text-center text-secondary mt-6">How much?</div>
+        <div style="position: relative; display: flex; justify-content: center; align-items: center;">
+          <span style="font-size: 2rem; position: absolute; left: 20%; color: var(--color-text-muted);">$</span>
+          <input type="number" name="amount" class="amount-input" placeholder="0.00" step="0.01" required />
+        </div>
+
+      <!-- Details Form -->
+      <div class="form-section">
+        
+        <h4 class="mb-4 text-sm text-secondary uppercase tracking-wider">Category</h4>
+        <div class="category-grid">
+          <div class="category-item active">
+            <div class="cat-icon">🛒</div>
+            <span class="cat-label">Groceries</span>
+          </div>
+          <div class="category-item">
+            <div class="cat-icon">🍔</div>
+            <span class="cat-label">Dining</span>
+          </div>
+          <div class="category-item">
+            <div class="cat-icon">🚗</div>
+            <span class="cat-label">Transport</span>
+          </div>
+          <div class="category-item">
+            <div class="cat-icon">🛍️</div>
+            <span class="cat-label">Shopping</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input type="hidden" name="type" value="Expense" />
+          <input type="hidden" name="category" value="Groceries" />
+          <label class="form-label">Note</label>
+          <input type="text" name="notes" class="form-control" placeholder="What was this for?" />
+        </div>
+        
+        <div class="form-group mb-8">
+          <label class="form-label">Date</label>
+          <input type="date" name="date" class="form-control" value="2026-05-01" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" style="width: 100%; padding: 1rem; border:none; border-radius: var(--radius-full);">
+          Save Transaction
+        </button>
+      </div>
+      </form>
+      
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

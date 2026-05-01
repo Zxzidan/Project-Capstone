@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinTrack AI - Insights & Reports</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .insight-card {
+        background: var(--glass-bg);
+        border-left: 4px solid var(--color-primary);
+        padding: var(--spacing-4);
+        border-radius: var(--radius-md);
+      }
+      .insight-card.warning { border-left-color: var(--color-warning); }
+      .insight-card.success { border-left-color: var(--color-accent); }
+      
+      .chart-container-large {
+        height: 350px;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-muted);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chart-placeholder {
+        width: 100%;
+        height: 100%;
+        background: 
+          linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%),
+          radial-gradient(circle at 50% 120%, rgba(139, 92, 246, 0.3) 0%, transparent 60%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 2px dashed rgba(255,255,255,0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="text-xl font-bold"><span class="text-gradient">FinTrack</span> AI</h2>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/pages/desktop/dashboard.html" class="nav-item">💻 Dashboard</a>
+          <a href="/pages/desktop/insights.html" class="nav-item active">📊 Insights & Reports</a>
+          <a href="/pages/desktop/add-transaction.html" class="nav-item">💳 Add Transaction</a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h1 class="mb-2">Analysis & Insights</h1>
+            <p class="text-secondary">AI-powered financial reports for May 2026</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <select class="form-control" style="background-color: var(--color-bg); width: 150px;">
+              <option>May 2026</option>
+              <option>April 2026</option>
+              <option>March 2026</option>
+            </select>
+            <button class="btn btn-secondary">⬇️ Export CSV</button>
+            <div class="user-profile">
+              <div class="avatar">D</div>
+            </div>
+          </div>
+        </header>
+
+        <div class="animate-fade-in">
+          
+          <div class="grid lg:grid-cols-3 gap-6 mb-8">
+            
+            <!-- Main Chart -->
+            <div class="lg:col-span-2" style="grid-column: span 2;">
+              <div class="glass-panel p-6">
+                <h3 class="mb-4">Spending Trends vs. Average</h3>
+                <div class="chart-container-large">
+                  <div class="chart-placeholder">
+                    <span>[ Interactive Line Chart Component ]</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Recommendations Sidebar -->
+            <div class="glass-panel p-6 flex flex-col gap-4">
+              <h3 class="mb-2">AI Recommendations</h3>
+              
+              <div class="insight-card warning">
+                <div class="flex items-center gap-2 mb-2">
+                  <span>⚠️</span>
+                  <span class="font-bold text-sm">High Dining Expense</span>
+                </div>
+                <p class="text-sm text-secondary m-0">You've spent $450 on dining out this month. That's 20% higher than your usual average.</p>
+              </div>
+
+              <div class="insight-card success">
+                <div class="flex items-center gap-2 mb-2">
+                  <span>✅</span>
+                  <span class="font-bold text-sm">Subscription Optimized</span>
+                </div>
+                <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving $45/month!</p>
+              </div>
+
+              <div class="insight-card">
+                <div class="flex items-center gap-2 mb-2">
+                  <span style="color: var(--color-primary);">🤖</span>
+                  <span class="font-bold text-sm">Forecast</span>
+                </div>
+                <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra $320 in savings.</p>
+              </div>
+              
+            </div>
+          </div>
+          
+          <!-- Category Breakdown -->
+          <div class="glass-panel p-6">
+            <h3 class="mb-4">Spending by Category</h3>
+            <div class="grid md:grid-cols-4 gap-4">
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+                <div class="text-muted text-sm mb-1">Housing & Utilities</div>
+                <div class="font-bold text-xl">$1,450.00</div>
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                  <div class="bg-blue-600 h-1.5 rounded-full" style="width: 45%; background: var(--color-primary);"></div>
+                </div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+                <div class="text-muted text-sm mb-1">Food & Dining</div>
+                <div class="font-bold text-xl">$650.00</div>
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                  <div class="bg-blue-600 h-1.5 rounded-full" style="width: 25%; background: var(--color-secondary);"></div>
+                </div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+                <div class="text-muted text-sm mb-1">Transportation</div>
+                <div class="font-bold text-xl">$320.00</div>
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                  <div class="bg-blue-600 h-1.5 rounded-full" style="width: 15%; background: var(--color-warning);"></div>
+                </div>
+              </div>
+              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+                <div class="text-muted text-sm mb-1">Entertainment</div>
+                <div class="font-bold text-xl">$200.00</div>
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                  <div class="bg-blue-600 h-1.5 rounded-full" style="width: 10%; background: var(--color-accent);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

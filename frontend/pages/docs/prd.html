@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinTrack AI - PRD</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .prd-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: var(--spacing-8) var(--spacing-4);
+      }
+      .prd-content h1 { font-size: 2.5rem; margin-bottom: var(--spacing-4); }
+      .prd-content h2 { font-size: 1.75rem; margin-top: var(--spacing-8); margin-bottom: var(--spacing-4); border-bottom: 1px solid var(--border-color); padding-bottom: var(--spacing-2); }
+      .prd-content h3 { font-size: 1.25rem; margin-top: var(--spacing-6); margin-bottom: var(--spacing-3); color: var(--color-primary); }
+      .prd-content p { margin-bottom: var(--spacing-4); color: var(--color-text-secondary); line-height: 1.7; }
+      .prd-content ul { margin-bottom: var(--spacing-4); padding-left: var(--spacing-6); color: var(--color-text-secondary); }
+      .prd-content li { margin-bottom: var(--spacing-2); }
+    </style>
+  </head>
+  <body>
+    <!-- Top Navigation -->
+    <nav class="container flex justify-between items-center py-4" style="border-bottom: 1px solid var(--border-color);">
+      <div class="flex items-center gap-2">
+        <a href="/index.html" class="btn btn-secondary" style="padding: 0.25rem 0.5rem;">← Back to Hub</a>
+      </div>
+      <div class="font-bold">FinTrack AI Documentation</div>
+    </nav>
+
+    <!-- Document Content -->
+    <main class="prd-container animate-fade-in prd-content glass-panel" style="margin-top: var(--spacing-8); margin-bottom: var(--spacing-8);">
+      
+      <div class="badge badge-warning mb-4">CONFIDENTIAL</div>
+      
+      <h1>Product Requirements Document (PRD)</h1>
+      <p class="text-lg"><strong>Project:</strong> FinTrack AI (ID: 9761210568567244669)</p>
+      <p><strong>Version:</strong> 1.0.0 | <strong>Date:</strong> May 1, 2026</p>
+      
+      <h2>1. Overview</h2>
+      <p>FinTrack AI is a next-generation personal finance application designed to help users track expenses, manage budgets, and gain intelligent insights into their spending habits through AI-powered analytics.</p>
+
+      <h2>2. Target Audience</h2>
+      <ul>
+        <li>Young professionals looking to manage their personal wealth.</li>
+        <li>Freelancers needing automated categorization for tax purposes.</li>
+        <li>Anyone looking to optimize their savings and reduce unnecessary subscriptions.</li>
+      </ul>
+
+      <h2>3. Core Features</h2>
+      
+      <h3>3.1 Intelligent Dashboard</h3>
+      <p>A unified dashboard available on both Desktop and Mobile that provides a quick overview of Total Balance, Monthly Spending, and AI Savings Goal progress. It includes recent transaction lists and interactive cash flow charts.</p>
+      
+      <h3>3.2 Seamless Transaction Entry</h3>
+      <p>Users can quickly add expenses or incomes using a streamlined interface. The mobile app features a quick "Numpad" style entry for on-the-go tracking.</p>
+
+      <h3>3.3 AI-Powered Insights</h3>
+      <p>The system analyzes spending velocity and category trends to provide actionable recommendations. For example: detecting an unused subscription, warning about high dining expenses, or projecting end-of-month balances.</p>
+
+      <h2>4. Design & Aesthetics</h2>
+      <p>The application must use a "Super-App" modern aesthetic:</p>
+      <ul>
+        <li><strong>Glassmorphism:</strong> Blurred backgrounds and semi-transparent panels.</li>
+        <li><strong>Color Palette:</strong> Deep space background (#0f172a) with vibrant accents (Primary Blue, Secondary Purple, Success Green).</li>
+        <li><strong>Typography:</strong> 'Inter' font for maximum readability and modern feel.</li>
+      </ul>
+
+      <h2>5. Future Roadmap</h2>
+      <ul>
+        <li><strong>v1.1:</strong> Plaid integration for automatic bank syncing.</li>
+        <li><strong>v2.0:</strong> Collaborative budgets for households and couples.</li>
+        <li><strong>v2.5:</strong> AI Chatbot assistant for conversational finance queries.</li>
+      </ul>
+
+    </main>
+
+    <footer class="container text-center py-8 text-muted text-sm mt-8">
+      &copy; 2026 FinTrack AI Internal Documentation.
+    </footer>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

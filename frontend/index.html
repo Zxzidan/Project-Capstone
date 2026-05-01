@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinTrack AI - Landing</title>
+    <link rel="stylesheet" href="/css/index.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="container flex justify-between items-center py-4" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+      <div class="flex items-center gap-2">
+        <div class="avatar" style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));">F</div>
+        <span class="font-bold text-xl tracking-tight">FinTrack AI</span>
+      </div>
+      <div class="flex gap-4">
+        <a href="/pages/auth/login.html" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Login</a>
+        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Get Started</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="container flex flex-col items-center justify-center text-center animate-fade-in" style="min-height: 80vh; padding-top: 4rem;">
+      <div class="badge badge-success mb-6">✨ New AI Insights Engine Live</div>
+      
+      <h1 class="mb-6" style="font-size: 3.5rem; line-height: 1.1; max-width: 800px;">
+        Master Your Finances with <br />
+        <span class="text-gradient">Intelligent Automation</span>
+      </h1>
+      
+      <p class="text-secondary text-lg mb-8" style="max-width: 600px;">
+        FinTrack AI automatically categorizes your expenses, predicts future trends, and helps you build wealth effortlessly.
+      </p>
+      
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+          Start Tracking Free
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <!-- Feature Highlights -->
+      <div class="grid md:grid-cols-3 gap-6 w-full text-left" style="max-width: 1000px; margin-top: 2rem;">
+        <div class="glass-panel p-6">
+          <div class="card-icon" style="color: var(--color-primary);">🤖</div>
+          <h3 class="text-lg mb-2">AI Categorization</h3>
+          <p class="text-muted text-sm">Automatically sorts your transactions into tax-friendly categories without manual effort.</p>
+        </div>
+        <div class="glass-panel p-6">
+          <div class="card-icon" style="color: var(--color-secondary);">📈</div>
+          <h3 class="text-lg mb-2">Smart Predictions</h3>
+          <p class="text-muted text-sm">Forecast your end-of-month balance and get alerts before you overspend your budget.</p>
+        </div>
+        <div class="glass-panel p-6">
+          <div class="card-icon" style="color: var(--color-accent);">🔒</div>
+          <h3 class="text-lg mb-2">Bank-Grade Security</h3>
+          <p class="text-muted text-sm">Your data is encrypted and secure. We never sell your personal financial information.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="container text-center py-8 text-muted text-sm mt-8 border-t" style="border-top: 1px solid var(--border-color);">
+      &copy; 2026 FinTrack AI. Designed for a modern web experience.
+    </footer>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

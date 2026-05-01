@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinTrack AI - Add Transaction</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .transaction-form-card {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .amount-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-2) var(--spacing-4);
+      }
+      .amount-wrapper span {
+        font-size: 1.5rem;
+        color: var(--color-text-muted);
+        margin-right: var(--spacing-2);
+      }
+      .amount-wrapper input {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        width: 100%;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="text-xl font-bold"><span class="text-gradient">FinTrack</span> AI</h2>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/pages/desktop/dashboard.html" class="nav-item">💻 Dashboard</a>
+          <a href="/pages/desktop/insights.html" class="nav-item">📊 Insights & Reports</a>
+          <a href="/pages/desktop/add-transaction.html" class="nav-item active">💳 Add Transaction</a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content flex items-center justify-center">
+        
+        <div class="glass-panel p-8 transaction-form-card w-full animate-fade-in">
+          <h2 class="mb-6 border-b pb-4" style="border-bottom: 1px solid var(--border-color);">New Transaction</h2>
+          
+          <form id="addTxForm">
+            
+            <div class="form-group">
+              <label class="form-label">Amount</label>
+              <div class="amount-wrapper">
+                <span>$</span>
+                <input type="number" name="amount" step="0.01" placeholder="0.00" required />
+              </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="form-group">
+                <label class="form-label">Type</label>
+                <select name="type" class="form-control" style="background-color: var(--color-bg);">
+                  <option>Expense</option>
+                  <option>Income</option>
+                  <option>Transfer</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Date</label>
+                <input type="date" name="date" class="form-control" value="2026-05-01" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select name="category" class="form-control" style="background-color: var(--color-bg);">
+                <option>🛒 Groceries</option>
+                <option>🍔 Dining</option>
+                <option>🚗 Transport</option>
+                <option>🛍️ Shopping</option>
+                <option>💻 Electronics</option>
+                <option>💼 Income</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-8">
+              <label class="form-label">Notes (Optional)</label>
+              <textarea name="notes" class="form-control" rows="3" placeholder="What was this transaction for?"></textarea>
+            </div>
+
+            <div class="flex justify-end gap-4">
+              <a href="/pages/desktop/dashboard.html" class="btn btn-secondary">Cancel</a>
+              <button type="submit" class="btn btn-primary">Save Transaction</button>
+            </div>
+
+          </form>
+        </div>
+
+      </main>
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

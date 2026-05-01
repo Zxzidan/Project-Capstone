@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>FinTrack AI - Insights</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .mobile-layout {
+        max-width: 480px;
+        margin: 0 auto;
+        min-height: 100vh;
+        background: var(--color-bg);
+        position: relative;
+        padding-bottom: 80px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+      
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-4);
+        position: sticky;
+        top: 0;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: var(--glass-blur);
+        z-index: 10;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .chart-container {
+        height: 220px;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        margin: var(--spacing-4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-muted);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chart-placeholder {
+        width: 100%;
+        height: 100%;
+        background: 
+          radial-gradient(circle at 50% 120%, rgba(139, 92, 246, 0.4) 0%, transparent 60%),
+          radial-gradient(circle at 10% 80%, rgba(59, 130, 246, 0.4) 0%, transparent 60%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 2px dashed rgba(255,255,255,0.2);
+      }
+
+      .insight-card {
+        background: var(--glass-bg);
+        border-left: 4px solid var(--color-primary);
+        padding: var(--spacing-4);
+        margin: var(--spacing-4);
+        border-radius: var(--radius-md);
+      }
+      
+      .insight-card.warning {
+        border-left-color: var(--color-warning);
+      }
+      
+      .insight-card.success {
+        border-left-color: var(--color-accent);
+      }
+
+      /* Bottom Navigation (Reused) */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-around;
+        padding: var(--spacing-2) 0;
+        z-index: 100;
+        padding-bottom: calc(var(--spacing-2) + env(safe-area-inset-bottom, 0px));
+      }
+      
+      .nav-item-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+        gap: 4px;
+      }
+      
+      .nav-item-mobile.active {
+        color: var(--color-primary);
+      }
+      
+      .nav-icon {
+        font-size: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-layout animate-fade-in">
+      
+      <!-- Header -->
+      <header class="mobile-header">
+        <div style="width: 24px;"></div> <!-- Spacer -->
+        <h3 style="margin: 0;">AI Insights</h3>
+        <div class="avatar" style="background: rgba(255,255,255,0.1); width: 32px; height: 32px; font-size: 1rem;">⚙️</div>
+      </header>
+
+      <!-- Date Filter -->
+      <div class="flex justify-between items-center px-4 py-4" style="padding: var(--spacing-4);">
+        <h2 class="text-xl m-0">May 2026</h2>
+        <span class="badge badge-success">On Track</span>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-container">
+        <div class="chart-placeholder">
+          <span>[ Spending Chart Component ]</span>
+        </div>
+      </div>
+
+      <!-- AI Recommendations -->
+      <h4 class="px-4 mt-6 mb-2" style="padding: 0 var(--spacing-4);">AI Recommendations</h4>
+      
+      <div class="insight-card warning">
+        <div class="flex items-center gap-2 mb-2">
+          <span>⚠️</span>
+          <span class="font-bold text-sm">High Dining Expense</span>
+        </div>
+        <p class="text-sm text-secondary m-0">You've spent $450 on dining out this month. That's 20% higher than your usual average. Consider cooking at home this weekend.</p>
+      </div>
+
+      <div class="insight-card success">
+        <div class="flex items-center gap-2 mb-2">
+          <span>✅</span>
+          <span class="font-bold text-sm">Subscription Optimized</span>
+        </div>
+        <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving $45/month!</p>
+      </div>
+
+      <div class="insight-card">
+        <div class="flex items-center gap-2 mb-2">
+          <span style="color: var(--color-primary);">🤖</span>
+          <span class="font-bold text-sm">Forecast: Looking Good</span>
+        </div>
+        <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra $320 in savings.</p>
+      </div>
+      
+      <div style="height: 40px;"></div> <!-- Extra padding -->
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav">
+        <a href="/pages/mobile/dashboard.html" class="nav-item-mobile">
+          <span class="nav-icon">🏠</span>
+          <span>Home</span>
+        </a>
+        <a href="/pages/mobile/insights.html" class="nav-item-mobile active">
+          <span class="nav-icon">📊</span>
+          <span>Insights</span>
+        </a>
+        <a href="/pages/mobile/add-transaction.html" class="nav-item-mobile" style="transform: translateY(-10px);">
+          <div style="background: var(--color-primary); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.5);">
+            <span class="nav-icon" style="color: white;">+</span>
+          </div>
+        </a>
+        <a href="#" class="nav-item-mobile">
+          <span class="nav-icon">💳</span>
+          <span>Cards</span>
+        </a>
+        <a href="/index.html" class="nav-item-mobile">
+          <span class="nav-icon">⚙️</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+      
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>FinTrack AI - Dashboard</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .mobile-layout {
+        max-width: 480px;
+        margin: 0 auto;
+        min-height: 100vh;
+        background: var(--color-bg);
+        position: relative;
+        padding-bottom: 80px; /* Space for bottom nav */
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+      
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-4);
+        position: sticky;
+        top: 0;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: var(--glass-blur);
+        z-index: 10;
+      }
+      
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-around;
+        padding: var(--spacing-2) 0;
+        z-index: 100;
+        padding-bottom: calc(var(--spacing-2) + env(safe-area-inset-bottom, 0px));
+      }
+      
+      .nav-item-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+        gap: 4px;
+      }
+      
+      .nav-item-mobile.active {
+        color: var(--color-primary);
+      }
+      
+      .nav-icon {
+        font-size: 1.5rem;
+      }
+      
+      .main-balance-card {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6);
+        margin: var(--spacing-4);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+      }
+      
+      .action-buttons {
+        display: flex;
+        gap: var(--spacing-4);
+        margin: 0 var(--spacing-4) var(--spacing-6);
+      }
+      
+      .action-btn {
+        flex: 1;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        padding: var(--spacing-3);
+        border-radius: var(--radius-md);
+        text-align: center;
+        font-weight: 500;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+      
+      .transaction-list {
+        background: var(--glass-bg);
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        padding: var(--spacing-4);
+        min-height: 400px;
+      }
+      
+      .t-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-3) 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-layout animate-fade-in">
+      
+      <!-- Header -->
+      <header class="mobile-header">
+        <div class="user-profile">
+          <div class="avatar" style="width: 32px; height: 32px;">D</div>
+          <span style="font-weight: 600;">Hi, Dandi</span>
+        </div>
+        <div class="avatar" style="background: rgba(255,255,255,0.1); width: 32px; height: 32px;">🔔</div>
+      </header>
+
+      <!-- Main Balance Card -->
+      <div class="main-balance-card">
+        <div style="color: rgba(255,255,255,0.8); font-size: 0.875rem;">Total Balance</div>
+        <h1 style="color: white; margin: 8px 0; font-size: 2.5rem;">$12,450.00</h1>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <span style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 12px; font-size: 0.75rem;">+2.5% this month</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="action-buttons">
+        <a href="/pages/mobile/add-transaction.html" class="action-btn">
+          <span style="font-size: 1.5rem;">💸</span>
+          Send
+        </a>
+        <a href="#" class="action-btn">
+          <span style="font-size: 1.5rem;">⬇️</span>
+          Request
+        </a>
+        <a href="/pages/mobile/add-transaction.html" class="action-btn">
+          <span style="font-size: 1.5rem;">➕</span>
+          Top Up
+        </a>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="transaction-list">
+        <div class="flex justify-between items-center mb-4">
+          <h3 style="margin: 0;">Recent Activity</h3>
+          <a href="#" style="color: var(--color-primary); font-size: 0.875rem;">See All</a>
+        </div>
+        
+        <div class="t-row">
+          <div class="flex items-center gap-3">
+            <div class="avatar" style="background: rgba(255,255,255,0.1);">🛒</div>
+            <div>
+              <div class="font-bold">Whole Foods</div>
+              <div class="text-sm text-muted">Today, 2:45 PM</div>
+            </div>
+          </div>
+          <div class="font-bold text-danger">-$120.50</div>
+        </div>
+        
+        <div class="t-row">
+          <div class="flex items-center gap-3">
+            <div class="avatar" style="background: rgba(16, 185, 129, 0.2); color: var(--color-accent);">💼</div>
+            <div>
+              <div class="font-bold">Salary Deposit</div>
+              <div class="text-sm text-muted">Yesterday</div>
+            </div>
+          </div>
+          <div class="font-bold text-success">+$4,500.00</div>
+        </div>
+        
+        <div class="t-row">
+          <div class="flex items-center gap-3">
+            <div class="avatar" style="background: rgba(255,255,255,0.1);">☕</div>
+            <div>
+              <div class="font-bold">Starbucks</div>
+              <div class="text-sm text-muted">Oct 12</div>
+            </div>
+          </div>
+          <div class="font-bold text-danger">-$5.40</div>
+        </div>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav">
+        <a href="/pages/mobile/dashboard.html" class="nav-item-mobile active">
+          <span class="nav-icon">🏠</span>
+          <span>Home</span>
+        </a>
+        <a href="/pages/mobile/insights.html" class="nav-item-mobile">
+          <span class="nav-icon">📊</span>
+          <span>Insights</span>
+        </a>
+        <a href="/pages/mobile/add-transaction.html" class="nav-item-mobile" style="transform: translateY(-10px);">
+          <div style="background: var(--color-primary); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.5);">
+            <span class="nav-icon" style="color: white;">+</span>
+          </div>
+        </a>
+        <a href="#" class="nav-item-mobile">
+          <span class="nav-icon">💳</span>
+          <span>Cards</span>
+        </a>
+        <a href="/index.html" class="nav-item-mobile">
+          <span class="nav-icon">⚙️</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+      
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

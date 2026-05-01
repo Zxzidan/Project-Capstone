@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinTrack AI - Dashboard</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .stat-card {
+        padding: var(--spacing-6);
+      }
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: var(--spacing-2) 0;
+      }
+      .trend-up { color: var(--color-accent); }
+      .trend-down { color: var(--color-danger); }
+      
+      .transaction-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-4);
+        border-bottom: 1px solid var(--border-color);
+        transition: background var(--transition-fast);
+      }
+      .transaction-row:last-child {
+        border-bottom: none;
+      }
+      .transaction-row:hover {
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .t-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        margin-right: var(--spacing-4);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="text-xl font-bold"><span class="text-gradient">FinTrack</span> AI</h2>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/pages/desktop/dashboard.html" class="nav-item active">💻 Dashboard</a>
+          <a href="/pages/desktop/insights.html" class="nav-item">📊 Insights & Reports</a>
+          <a href="/pages/desktop/add-transaction.html" class="nav-item">💳 Add Transaction</a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h1 class="mb-2">Overview</h1>
+            <p class="text-secondary">Welcome back! Here's your financial summary.</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="/pages/desktop/add-transaction.html" class="btn btn-primary">+ New Transaction</a>
+            <div class="user-profile">
+              <div class="avatar">D</div>
+              <span>Dandi</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="animate-fade-in">
+          
+          <!-- Key Stats -->
+          <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-panel stat-card">
+              <div class="text-secondary">Total Balance</div>
+              <div class="stat-value">$12,450.00</div>
+              <div class="text-sm trend-up">↑ 2.5% from last month</div>
+            </div>
+            <div class="glass-panel stat-card">
+              <div class="text-secondary">Monthly Spending</div>
+              <div class="stat-value">$3,240.50</div>
+              <div class="text-sm trend-down">↓ 1.2% from last month</div>
+            </div>
+            <div class="glass-panel stat-card">
+              <div class="text-secondary">AI Savings Goal</div>
+              <div class="stat-value">$8,000.00</div>
+              <div class="text-sm text-secondary">75% on track</div>
+            </div>
+          </div>
+
+          <!-- Main Layout Grid -->
+          <div class="grid lg:grid-cols-3 gap-6">
+            
+            <!-- Chart Area Placeholder -->
+            <div class="glass-panel p-6" style="grid-column: span 2;">
+              <h3 class="mb-4">Cash Flow Analysis</h3>
+              <div class="flex items-center justify-center text-muted" style="height: 300px; background: rgba(0,0,0,0.1); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+                [ Interactive Chart Component ]
+              </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="glass-panel">
+              <div class="p-6 border-b" style="border-bottom: 1px solid var(--border-color);">
+                <h3 class="m-0">Recent Transactions</h3>
+              </div>
+              <div class="flex flex-col">
+                <div class="transaction-row">
+                  <div class="flex items-center">
+                    <div class="t-icon">🛒</div>
+                    <div>
+                      <div class="font-bold">Whole Foods</div>
+                      <div class="text-sm text-muted">Groceries</div>
+                    </div>
+                  </div>
+                  <div class="font-bold text-danger">-$120.50</div>
+                </div>
+                <div class="transaction-row">
+                  <div class="flex items-center">
+                    <div class="t-icon">💻</div>
+                    <div>
+                      <div class="font-bold">Apple Store</div>
+                      <div class="text-sm text-muted">Electronics</div>
+                    </div>
+                  </div>
+                  <div class="font-bold text-danger">-$1,299.00</div>
+                </div>
+                <div class="transaction-row">
+                  <div class="flex items-center">
+                    <div class="t-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--color-accent);">💼</div>
+                    <div>
+                      <div class="font-bold">Salary</div>
+                      <div class="text-sm text-muted">Income</div>
+                    </div>
+                  </div>
+                  <div class="font-bold text-success">+$4,500.00</div>
+                </div>
+                <div class="transaction-row">
+                  <div class="flex items-center">
+                    <div class="t-icon">☕</div>
+                    <div>
+                      <div class="font-bold">Starbucks</div>
+                      <div class="text-sm text-muted">Dining</div>
+                    </div>
+                  </div>
+                  <div class="font-bold text-danger">-$5.40</div>
+                </div>
+              </div>
+              <div class="p-4 text-center">
+                <a href="#" style="color: var(--color-primary); font-size: 0.875rem;">View All Transactions</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>
