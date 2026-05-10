@@ -136,7 +136,7 @@ export const app = {
           txList.innerHTML += `
             <div class="transaction-row flex justify-between p-4 border-b border-gray-700">
               <div class="flex items-center">
-                <div class="t-icon mr-4">💰</div>
+                
                 <div>
                   <div class="font-bold">${t.category}</div>
                   <div class="text-sm text-muted">${t.date}</div>
@@ -164,11 +164,11 @@ export const app = {
       if (insightsContainer && res.insights) {
         insightsContainer.innerHTML = '';
         res.insights.forEach(insight => {
-          let icon = insight.type === 'warning' ? '⚠️' : (insight.type === 'success' ? '✅' : '🤖');
+          let icon = '';
           insightsContainer.innerHTML += `
             <div class="insight-card ${insight.type} mb-4">
               <div class="flex items-center gap-2 mb-2">
-                <span>${icon}</span>
+                
                 <span class="font-bold text-sm">${insight.title}</span>
               </div>
               <p class="text-sm text-secondary m-0">${insight.message}</p>

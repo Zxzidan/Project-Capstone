@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Finova AI - Insights</title>
+    <title>Finova - Insights</title>
     <link rel="stylesheet" href="/css/index.css" />
     <style>
       .mobile-layout {
@@ -52,7 +52,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-bottom: 2px dashed rgba(255,255,255,0.2);
+        border-bottom: 2px dashed rgba(0,0,0,0.08);
       }
 
       .insight-card {
@@ -114,7 +114,7 @@
       <header class="mobile-header">
         <div style="width: 24px;"></div> <!-- Spacer -->
         <h3 style="margin: 0;">AI Insights</h3>
-        <div class="avatar" style="background: rgba(255,255,255,0.1); width: 32px; height: 32px; font-size: 1rem;">⚙️</div>
+        
       </header>
 
       <!-- Date Filter -->
@@ -130,12 +130,12 @@
         </div>
       </div>
 
-      <!-- AI Recommendations -->
-      <h4 class="px-4 mt-6 mb-2" style="padding: 0 var(--spacing-4);">AI Recommendations</h4>
+      <!-- Recommendations -->
+      <h4 class="px-4 mt-6 mb-2" style="padding: 0 var(--spacing-4);">Recommendations</h4>
       
       <div class="insight-card warning">
         <div class="flex items-center gap-2 mb-2">
-          <span>⚠️</span>
+          <span></span>
           <span class="font-bold text-sm">High Dining Expense</span>
         </div>
         <p class="text-sm text-secondary m-0">You've spent Rp 450.000 on dining out this month. That's 20% higher than your usual average. Consider cooking at home this weekend.</p>
@@ -143,7 +143,7 @@
 
       <div class="insight-card success">
         <div class="flex items-center gap-2 mb-2">
-          <span>✅</span>
+          <span></span>
           <span class="font-bold text-sm">Subscription Optimized</span>
         </div>
         <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving Rp 45.000/month!</p>
@@ -151,7 +151,7 @@
 
       <div class="insight-card">
         <div class="flex items-center gap-2 mb-2">
-          <span style="color: var(--color-primary);">🤖</span>
+          <span style="color: var(--color-primary);"></span>
           <span class="font-bold text-sm">Forecast: Looking Good</span>
         </div>
         <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra Rp 320.000 in savings.</p>
@@ -162,24 +162,24 @@
       <!-- Bottom Navigation -->
       <nav class="bottom-nav">
         <a href="/pages/mobile/dashboard.html" class="nav-item-mobile">
-          <span class="nav-icon">🏠</span>
+          <span class="nav-icon"></span>
           <span>Home</span>
         </a>
         <a href="/pages/mobile/insights.html" class="nav-item-mobile active">
-          <span class="nav-icon">📊</span>
+          <span class="nav-icon"></span>
           <span>Insights</span>
         </a>
         <a href="/pages/mobile/add-transaction.html" class="nav-item-mobile" style="transform: translateY(-10px);">
-          <div style="background: var(--color-primary); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.5);">
-            <span class="nav-icon" style="color: white;">+</span>
+          <div style="background: var(--color-primary); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-text-primary); box-shadow: 0 4px 10px rgba(59,130,246,0.5);">
+            <span class="nav-icon" style="color: var(--color-text-primary);">+</span>
           </div>
         </a>
         <a href="#" class="nav-item-mobile">
-          <span class="nav-icon">💳</span>
+          <span class="nav-icon"></span>
           <span>Cards</span>
         </a>
         <a href="/index.html" class="nav-item-mobile">
-          <span class="nav-icon">⚙️</span>
+          <span class="nav-icon"></span>
           <span>Settings</span>
         </a>
       </nav>

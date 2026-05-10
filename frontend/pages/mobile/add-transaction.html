@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Finova AI - Add Transaction</title>
+    <title>Finova - Add Transaction</title>
     <link rel="stylesheet" href="/css/index.css" />
     <style>
       .mobile-layout {
@@ -26,7 +26,7 @@
       .amount-input {
         background: transparent;
         border: none;
-        color: white;
+        color: var(--color-text-primary);
         font-size: 3rem;
         font-weight: 700;
         text-align: center;
@@ -36,7 +36,7 @@
       }
       
       .amount-input::placeholder {
-        color: rgba(255,255,255,0.3);
+        color: var(--color-text-muted);
       }
       
       .category-grid {
@@ -111,19 +111,19 @@
         <h4 class="mb-4 text-sm text-secondary uppercase tracking-wider">Category</h4>
         <div class="category-grid">
           <div class="category-item active">
-            <div class="cat-icon">🛒</div>
+            <div class="cat-icon"></div>
             <span class="cat-label">Groceries</span>
           </div>
           <div class="category-item">
-            <div class="cat-icon">🍔</div>
+            <div class="cat-icon"></div>
             <span class="cat-label">Dining</span>
           </div>
           <div class="category-item">
-            <div class="cat-icon">🚗</div>
+            <div class="cat-icon"></div>
             <span class="cat-label">Transport</span>
           </div>
           <div class="category-item">
-            <div class="cat-icon">🛍️</div>
+            <div class="cat-icon"></div>
             <span class="cat-label">Shopping</span>
           </div>
         </div>
@@ -141,9 +141,9 @@
         </div>
 
         <div class="form-group mb-8">
-          <label class="form-label">Scan Struk / Receipt (AI Auto-fill)</label>
+          <label class="form-label">Scan Struk / Receipt (Auto-fill)</label>
           <label class="scan-wrapper" style="display: block; border: 1px dashed var(--color-primary); padding: 1rem; text-align: center; border-radius: var(--radius-md); cursor: pointer; background: rgba(59, 130, 246, 0.05); transition: all 0.3s;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">📸</div>
+            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;"></div>
             <div style="color: var(--color-primary); font-size: 0.875rem; font-weight: 500;">Tap to Scan Receipt</div>
             <input type="file" accept="image/*" capture="environment" style="display: none;" id="receiptInput" onchange="alert('Receipt scanning AI is processing...')" />
           </label>

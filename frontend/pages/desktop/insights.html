@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finova AI - Insights & Reports</title>
+    <title>Finova - Insights & Reports</title>
     <link rel="stylesheet" href="/css/index.css" />
     <style>
       .insight-card {
@@ -37,7 +37,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-bottom: 2px dashed rgba(255,255,255,0.2);
+        border-bottom: 2px dashed rgba(0,0,0,0.08);
       }
     </style>
   </head>
@@ -49,9 +49,9 @@
           <h2 class="text-xl font-bold"><span class="text-gradient">Finova</span> AI</h2>
         </div>
         <nav class="sidebar-nav">
-          <a href="/pages/desktop/dashboard.html" class="nav-item">💻 Dashboard</a>
-          <a href="/pages/desktop/insights.html" class="nav-item active">📊 Insights & Reports</a>
-          <a href="/pages/desktop/add-transaction.html" class="nav-item">💳 Add Transaction</a>
+          <a href="/pages/desktop/dashboard.html" class="nav-item">Dashboard</a>
+          <a href="/pages/desktop/insights.html" class="nav-item active">Insights & Reports</a>
+          <a href="/pages/desktop/add-transaction.html" class="nav-item">Add Transaction</a>
         </nav>
       </aside>
 
@@ -60,7 +60,7 @@
         <header class="topbar">
           <div>
             <h1 class="mb-2">Analysis & Insights</h1>
-            <p class="text-secondary">AI-powered financial reports for May 2026</p>
+            <p class="text-secondary">Smart financial reports for May 2026</p>
           </div>
           <div class="flex items-center gap-4">
             <select class="form-control" style="background-color: var(--color-bg); width: 150px;">
@@ -68,7 +68,7 @@
               <option>April 2026</option>
               <option>March 2026</option>
             </select>
-            <button class="btn btn-secondary">⬇️ Export CSV</button>
+            <button class="btn btn-secondary"> Export CSV</button>
             <div class="user-profile">
               <div class="avatar">D</div>
             </div>
@@ -91,13 +91,13 @@
               </div>
             </div>
 
-            <!-- AI Recommendations Sidebar -->
+            <!-- Recommendations Sidebar -->
             <div class="glass-panel p-6 flex flex-col gap-4">
-              <h3 class="mb-2">AI Recommendations</h3>
+              <h3 class="mb-2">Recommendations</h3>
               
               <div class="insight-card warning">
                 <div class="flex items-center gap-2 mb-2">
-                  <span>⚠️</span>
+                  <span></span>
                   <span class="font-bold text-sm">High Dining Expense</span>
                 </div>
                 <p class="text-sm text-secondary m-0">You've spent Rp 450.000 on dining out this month. That's 20% higher than your usual average.</p>
@@ -105,7 +105,7 @@
 
               <div class="insight-card success">
                 <div class="flex items-center gap-2 mb-2">
-                  <span>✅</span>
+                  <span></span>
                   <span class="font-bold text-sm">Subscription Optimized</span>
                 </div>
                 <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving Rp 45.000/month!</p>
@@ -113,7 +113,7 @@
 
               <div class="insight-card">
                 <div class="flex items-center gap-2 mb-2">
-                  <span style="color: var(--color-primary);">🤖</span>
+                  <span style="color: var(--color-primary);"></span>
                   <span class="font-bold text-sm">Forecast</span>
                 </div>
                 <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra Rp 320.000 in savings.</p>
@@ -126,31 +126,31 @@
           <div class="glass-panel p-6">
             <h3 class="mb-4">Spending by Category</h3>
             <div class="grid md:grid-cols-4 gap-4">
-              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+              <div class="p-4 rounded-lg" style="background: rgba(0,0,0,0.03); border: 1px solid var(--border-color);">
                 <div class="text-muted text-sm mb-1">Housing & Utilities</div>
                 <div class="font-bold text-xl">Rp 1.450.000</div>
-                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: #eff6ff;">
                   <div class="bg-blue-600 h-1.5 rounded-full" style="width: 45%; background: var(--color-primary);"></div>
                 </div>
               </div>
-              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+              <div class="p-4 rounded-lg" style="background: rgba(0,0,0,0.03); border: 1px solid var(--border-color);">
                 <div class="text-muted text-sm mb-1">Food & Dining</div>
                 <div class="font-bold text-xl">Rp 650.000</div>
-                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: #eff6ff;">
                   <div class="bg-blue-600 h-1.5 rounded-full" style="width: 25%; background: var(--color-secondary);"></div>
                 </div>
               </div>
-              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+              <div class="p-4 rounded-lg" style="background: rgba(0,0,0,0.03); border: 1px solid var(--border-color);">
                 <div class="text-muted text-sm mb-1">Transportation</div>
                 <div class="font-bold text-xl">Rp 320.000</div>
-                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: #eff6ff;">
                   <div class="bg-blue-600 h-1.5 rounded-full" style="width: 15%; background: var(--color-warning);"></div>
                 </div>
               </div>
-              <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">
+              <div class="p-4 rounded-lg" style="background: rgba(0,0,0,0.03); border: 1px solid var(--border-color);">
                 <div class="text-muted text-sm mb-1">Entertainment</div>
                 <div class="font-bold text-xl">Rp 200.000</div>
-                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: rgba(255,255,255,0.1);">
+                <div class="w-full bg-gray-700 mt-2 rounded-full h-1.5 mb-1" style="background: #eff6ff;">
                   <div class="bg-blue-600 h-1.5 rounded-full" style="width: 10%; background: var(--color-accent);"></div>
                 </div>
               </div>
