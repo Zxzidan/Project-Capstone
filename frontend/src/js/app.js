@@ -19,13 +19,23 @@ export const app = {
 
   checkAuthGuard() {
     const path = window.location.pathname;
-    const isAuthPage = path.includes('login.html') || path.includes('signup.html') || path.endsWith('/') || path.endsWith('index.html');
+    const isAuthPage = path.includes('login.html') || path.includes('signup.html');
+    const isLandingPage = path.endsWith('/') || path.endsWith('index.html');
     
-    if (!this.user && !isAuthPage) {
+    if (!this.user && !isAuthPage && !isLandingPage) {
       window.location.href = '/pages/auth/login.html';
-    } else if (this.user && isAuthPage && !path.endsWith('/')) {
-      // If logged in and on login page, go to dashboard
-      window.location.href = '/pages/desktop/dashboard.html';
+    } else if (this.user) {
+      // Check if onboarded
+      if (!this.user.onboarded && !path.includes('onboarding.html')) {
+        window.location.href = '/pages/auth/onboarding.html';
+        return;
+      }
+      
+      // If logged in and on login/signup page, go to dashboard
+      // But stay on landing page if already there
+      if (isAuthPage) {
+        window.location.href = '/pages/desktop/dashboard.html';
+      }
     }
     
     // Update UI profile name if logged in
@@ -62,7 +72,7 @@ export const app = {
         try {
           const res = await api.signup(email, password, name);
           localStorage.setItem('currentUser', JSON.stringify(res.user));
-          window.location.href = '/pages/desktop/dashboard.html';
+          window.location.href = '/pages/auth/onboarding.html';
         } catch (error) {
           alert('Signup failed: ' + error.message);
         }
@@ -73,9 +83,10 @@ export const app = {
     if (addTxForm) {
       addTxForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const rawAmount = e.target.amount.value.replace(/\./g, '');
         const data = {
           userId: this.user.id,
-          amount: e.target.amount.value,
+          amount: parseFloat(rawAmount),
           type: e.target.type ? e.target.type.value : 'Expense',
           category: e.target.category ? e.target.category.value : 'General',
           date: e.target.date ? e.target.date.value : new Date().toISOString(),
@@ -86,6 +97,35 @@ export const app = {
           window.location.href = '/pages/desktop/dashboard.html';
         } catch (error) {
           alert('Failed to add transaction: ' + error.message);
+        }
+      });
+    }
+
+    const onboardingForm = document.getElementById('onboardingForm');
+    if (onboardingForm) {
+      onboardingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const profileData = {};
+        formData.forEach((value, key) => {
+          // Strip currency formatting for specific fields
+          if (['monthlyIncome', 'assetValue', 'loanAmount', 'monthlyDebt'].includes(key)) {
+            profileData[key] = parseFloat(value.replace(/\./g, '')) || 0;
+          } else {
+            profileData[key] = value;
+          }
+        });
+
+        try {
+          const res = await api.updateUserProfile(this.user.id, profileData);
+          // Update local user data
+          const updatedUser = { ...this.user, ...res.user, onboarded: true };
+          localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+          this.user = updatedUser;
+          
+          window.location.href = '/pages/desktop/dashboard.html';
+        } catch (error) {
+          alert('Failed to save profile: ' + error.message);
         }
       });
     }
@@ -149,9 +189,90 @@ export const app = {
           `;
         });
       }
+      // Render chart
+      this.renderChart(transactions);
+
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
     }
+  },
+
+  renderChart(transactions) {
+    const ctx = document.getElementById('cashFlowChart');
+    if (!ctx) return;
+
+    // Group transactions by date
+    const last7Days = [...Array(7)].map((_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return d.toISOString().split('T')[0];
+    }).reverse();
+
+    const dailyData = last7Days.map(date => {
+      let income = 0;
+      let expense = 0;
+      transactions.forEach(t => {
+        if (t.date.startsWith(date)) {
+          if (t.type === 'Income') income += t.amount;
+          else expense += t.amount;
+        }
+      });
+      return { date, income, expense };
+    });
+
+    if (this.chart) this.chart.destroy();
+
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: dailyData.map(d => {
+          const date = new Date(d.date);
+          return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+        }),
+        datasets: [
+          {
+            label: 'Income',
+            data: dailyData.map(d => d.income),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'Expense',
+            data: dailyData.map(d => d.expense),
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            labels: { color: '#94a3b8' }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+            ticks: { 
+              color: '#94a3b8',
+              callback: (value) => 'Rp ' + value.toLocaleString('id-ID')
+            }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: '#94a3b8' }
+          }
+        }
+      }
+    });
   },
 
   async loadInsightsData() {

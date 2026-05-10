@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finova - Profile</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .profile-card {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-6);
+      }
+      .profile-item {
+        margin-bottom: var(--spacing-4);
+      }
+      .profile-label {
+        color: var(--color-text-muted);
+        font-size: 0.875rem;
+        margin-bottom: var(--spacing-1);
+      }
+      .profile-value {
+        font-weight: 600;
+        color: var(--color-text-primary);
+        font-size: 1.1rem;
+      }
+      .section-header {
+        grid-column: span 2;
+        margin-top: var(--spacing-8);
+        padding-bottom: var(--spacing-2);
+        border-bottom: 1px solid var(--border-color);
+        color: var(--color-primary);
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="text-xl font-bold"><span class="text-gradient">Finova</span> AI</h2>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/pages/desktop/dashboard.html" class="nav-item">Dashboard</a>
+          <a href="/pages/desktop/insights.html" class="nav-item">Insights & Reports</a>
+          <a href="/pages/desktop/add-transaction.html" class="nav-item">Add Transaction</a>
+          <a href="/pages/desktop/profile.html" class="nav-item active">Profile</a>
+        </nav>
+        <div class="sidebar-footer" style="padding: var(--spacing-4); margin-top: auto;">
+          <button id="logoutBtn" class="btn btn-secondary w-full" style="width: 100%;">Logout</button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h1 class="mb-2">My Profile</h1>
+            <p class="text-secondary">View and manage your personal financial profile.</p>
+          </div>
+        </header>
+
+        <div class="glass-panel p-8 profile-card animate-fade-in">
+          <div class="profile-grid" id="profileDisplay">
+            <!-- Data will be loaded here -->
+            <div style="grid-column: span 2; text-align: center; padding: 3rem;">
+              <p class="text-secondary">Loading profile data...</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { app } from '/src/js/app.js';
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        const display = document.getElementById('profileDisplay');
+        
+        if (user) {
+          const formatNum = (num) => 'Rp ' + (parseFloat(num) || 0).toLocaleString('id-ID');
+          
+          display.innerHTML = `
+            <div class="section-header">Informasi Pribadi</div>
+            <div class="profile-item">
+              <div class="profile-label">Nama Lengkap</div>
+              <div class="profile-value">${user.name || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Email</div>
+              <div class="profile-value">${user.email || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Umur</div>
+              <div class="profile-value">${user.age || '-'} Tahun</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Gender</div>
+              <div class="profile-value">${user.gender || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Tingkat Pendidikan</div>
+              <div class="profile-value">${user.education || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Status Pernikahan</div>
+              <div class="profile-value">${user.maritalStatus || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Jumlah Tanggungan</div>
+              <div class="profile-value">${user.dependents || '0'}</div>
+            </div>
+
+            <div class="section-header">Pekerjaan & Pendapatan</div>
+            <div class="profile-item">
+              <div class="profile-label">Status Karyawan</div>
+              <div class="profile-value">${user.employmentStatus || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Lama Bekerja</div>
+              <div class="profile-value">${user.tenure || '-'} Tahun</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Penghasilan tiap bulan</div>
+              <div class="profile-value">${formatNum(user.monthlyIncome)}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Nilai Aset yg dimiliki</div>
+              <div class="profile-value">${formatNum(user.assetValue)}</div>
+            </div>
+
+            <div class="section-header">Pinjaman & Hutang</div>
+            <div class="profile-item">
+              <div class="profile-label">Jumlah Pinjaman</div>
+              <div class="profile-value">${formatNum(user.loanAmount)}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Tujuan Pinjaman</div>
+              <div class="profile-value">${user.loanPurpose || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Cicilan Hutang per bulan</div>
+              <div class="profile-value">${formatNum(user.monthlyDebt)}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Debt to Income Ratio (DTI)</div>
+              <div class="profile-value" style="color: var(--color-primary)">${user.dtiRatio || '-'}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Pernah Gagal Bayar?</div>
+              <div class="profile-value">${user.everDefaulted || 'No'} ${user.defaultCount ? '(' + user.defaultCount + ' kali)' : ''}</div>
+            </div>
+            <div class="profile-item">
+              <div class="profile-label">Perubahan Status Perkawinan</div>
+              <div class="profile-value">${user.maritalStatusChange || '-'}</div>
+            </div>
+          `;
+        }
+      });
+    </script>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

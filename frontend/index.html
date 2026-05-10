@@ -13,27 +13,31 @@
         <div class="avatar">F</div>
         <span class="font-bold text-xl tracking-tight">Finova</span>
       </div>
-      <div class="flex gap-4">
-        <a href="/pages/auth/login.html" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Login</a>
-        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Get Started</a>
+      <div class="flex items-center gap-4">
+        <select id="langSwitcher" class="btn" style="padding: 0.5rem; border: 1px solid var(--border-color); background: rgba(255,255,255,0.05); color: var(--color-text-primary); border-radius: var(--radius-md); font-weight: 500; cursor: pointer;">
+          <option value="en">English 🇬🇧</option>
+          <option value="id">Indonesia 🇮🇩</option>
+        </select>
+        <a href="/pages/auth/login.html" class="btn btn-secondary" style="padding: 0.5rem 1rem;" data-i18n="nav-login">Login</a>
+        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 0.5rem 1rem;" data-i18n="nav-get-started">Get Started</a>
       </div>
     </nav>
 
     <!-- Hero Section -->
     <main class="container flex flex-col items-center justify-center text-center animate-fade-in" style="min-height: 80vh; padding-top: 4rem;">
-      <div class="badge badge-success mb-6">🚀 New Financial Dashboard Live</div>
+      <div class="badge badge-success mb-6" data-i18n="hero-badge">🚀 New Financial Dashboard Live</div>
       
-      <h1 class="mb-6" style="font-size: 3.5rem; line-height: 1.1; max-width: 800px;">
+      <h1 class="mb-6" style="font-size: 3.5rem; line-height: 1.1; max-width: 800px;" data-i18n="hero-title">
         Master Your Finances with <br />
         <span class="text-gradient">Smart Tracking</span>
       </h1>
       
-      <p class="text-secondary text-lg mb-8" style="max-width: 600px;">
+      <p class="text-secondary text-lg mb-8" style="max-width: 600px;" data-i18n="hero-desc">
         Finova automatically categorizes your expenses, predicts future trends, and helps you build wealth effortlessly.
       </p>
       
       <div class="flex flex-wrap justify-center gap-4 mb-12">
-        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;" data-i18n="hero-btn">
           Start Tracking Free
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.5rem;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -42,23 +46,80 @@
       <!-- Feature Highlights -->
       <div class="grid md:grid-cols-3 gap-6 w-full text-left" style="max-width: 1000px; margin-top: 2rem;">
         <div class="glass-panel p-6">
-          <h3 class="text-lg mb-2">Smart Categorization</h3>
-          <p class="text-muted text-sm">Automatically sorts your transactions into tax-friendly categories without manual effort.</p>
+          <h3 class="text-lg mb-2" data-i18n="feat-1-title">Smart Categorization</h3>
+          <p class="text-muted text-sm" data-i18n="feat-1-desc">Automatically sorts your transactions into tax-friendly categories without manual effort.</p>
         </div>
         <div class="glass-panel p-6">
-          <h3 class="text-lg mb-2">Financial Predictions</h3>
-          <p class="text-muted text-sm">Forecast your end-of-month balance and get alerts before you overspend your budget.</p>
+          <h3 class="text-lg mb-2" data-i18n="feat-2-title">Financial Predictions</h3>
+          <p class="text-muted text-sm" data-i18n="feat-2-desc">Forecast your end-of-month balance and get alerts before you overspend your budget.</p>
         </div>
         <div class="glass-panel p-6">
-          <h3 class="text-lg mb-2">Bank-Grade Security</h3>
-          <p class="text-muted text-sm">Your data is encrypted and secure. We never sell your personal financial information.</p>
+          <h3 class="text-lg mb-2" data-i18n="feat-3-title">Bank-Grade Security</h3>
+          <p class="text-muted text-sm" data-i18n="feat-3-desc">Your data is encrypted and secure. We never sell your personal financial information.</p>
         </div>
       </div>
     </main>
 
-    <footer class="container text-center py-8 text-muted text-sm mt-8 border-t" style="border-top: 1px solid var(--border-color);">
+    <footer class="container text-center py-8 text-muted text-sm mt-8 border-t" style="border-top: 1px solid var(--border-color);" data-i18n="footer-text">
       &copy; 2026 Finova. Designed for a modern web experience.
     </footer>
+
+    <script>
+      const translations = {
+        en: {
+          "nav-login": "Login",
+          "nav-get-started": "Get Started",
+          "hero-badge": "🚀 New Financial Dashboard Live",
+          "hero-title": "Master Your Finances with <br /> <span class=\"text-gradient\">Smart Tracking</span>",
+          "hero-desc": "Finova automatically categorizes your expenses, predicts future trends, and helps you build wealth effortlessly.",
+          "hero-btn": "Start Tracking Free <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"margin-left: 0.5rem;\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg>",
+          "feat-1-title": "Smart Categorization",
+          "feat-1-desc": "Automatically sorts your transactions into tax-friendly categories without manual effort.",
+          "feat-2-title": "Financial Predictions",
+          "feat-2-desc": "Forecast your end-of-month balance and get alerts before you overspend your budget.",
+          "feat-3-title": "Bank-Grade Security",
+          "feat-3-desc": "Your data is encrypted and secure. We never sell your personal financial information.",
+          "footer-text": "&copy; 2026 Finova. Designed for a modern web experience."
+        },
+        id: {
+          "nav-login": "Masuk",
+          "nav-get-started": "Mulai Sekarang",
+          "hero-badge": "🚀 Dashboard Keuangan Baru Telah Rilis",
+          "hero-title": "Kelola Keuangan Anda dengan <br /> <span class=\"text-gradient\">Pelacakan Pintar</span>",
+          "hero-desc": "Finova mengelompokkan pengeluaran Anda secara otomatis, memprediksi tren masa depan, dan membantu Anda menabung dengan mudah.",
+          "hero-btn": "Mulai Melacak Gratis <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"margin-left: 0.5rem;\"><path d=\"M5 12h14M12 5l7 7-7 7\"/></svg>",
+          "feat-1-title": "Kategorisasi Pintar",
+          "feat-1-desc": "Mengurutkan transaksi Anda ke dalam kategori pajak secara otomatis tanpa bantuan manual.",
+          "feat-2-title": "Prediksi Finansial",
+          "feat-2-desc": "Prakiraan saldo akhir bulan Anda dan dapatkan peringatan sebelum Anda melampaui anggaran.",
+          "feat-3-title": "Keamanan Kelas Bank",
+          "feat-3-desc": "Data Anda terenkripsi dan aman. Kami tidak pernah menjual informasi keuangan pribadi Anda.",
+          "footer-text": "&copy; 2026 Finova. Didesain untuk pengalaman web modern."
+        }
+      };
+
+      function updateLanguage(lang) {
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+          const key = el.getAttribute("data-i18n");
+          if (translations[lang] && translations[lang][key]) {
+            el.innerHTML = translations[lang][key];
+          }
+        });
+        localStorage.setItem("selectedLang", lang);
+      }
+
+      const switcher = document.getElementById("langSwitcher");
+      switcher.addEventListener("change", (e) => {
+        updateLanguage(e.target.value);
+      });
+
+      // Initial load
+      const savedLang = localStorage.getItem("selectedLang") || "en";
+      if (switcher) {
+        switcher.value = savedLang;
+        updateLanguage(savedLang);
+      }
+    </script>
     <script type="module" src="/src/js/app.js"></script>
   </body>
 </html>

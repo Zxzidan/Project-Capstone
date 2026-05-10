@@ -6,6 +6,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        landing: resolve(__dirname, 'landing.html'),
         login: resolve(__dirname, 'pages/auth/login.html'),
         signup: resolve(__dirname, 'pages/auth/signup.html'),
         mobileDashboard: resolve(__dirname, 'pages/mobile/dashboard.html'),

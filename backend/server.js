@@ -43,7 +43,7 @@ app.post('/api/auth/signup', (req, res) => {
   
   const users = readData(USERS_FILE);
   if (users.find(u => u.email === email)) {
-    return res.status(400).json({ error: 'User already exists' });
+    return res.status(400).json({ error: 'Email ini sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda.' });
   }
 
   const newUser = { id: Date.now().toString(), email, password, name: name || 'User' };
@@ -64,6 +64,23 @@ app.post('/api/auth/login', (req, res) => {
   
   const { password: _, ...userWithoutPassword } = user;
   res.json({ message: 'Login successful', user: userWithoutPassword });
+});
+
+app.put('/api/auth/profile', (req, res) => {
+  const { userId, ...profileData } = req.body;
+  if (!userId) return res.status(400).json({ error: 'User ID is required' });
+
+  const users = readData(USERS_FILE);
+  const userIndex = users.findIndex(u => u.id === userId);
+  
+  if (userIndex === -1) return res.status(404).json({ error: 'User not found' });
+
+  // Update user with profile data and mark as onboarded
+  users[userIndex] = { ...users[userIndex], ...profileData, onboarded: true };
+  writeData(USERS_FILE, users);
+
+  const { password: _, ...userWithoutPassword } = users[userIndex];
+  res.json({ message: 'Profile updated successfully', user: userWithoutPassword });
 });
 
 // ==========================================

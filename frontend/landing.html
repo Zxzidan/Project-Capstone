@@ -3,65 +3,634 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finova AI - Landing</title>
+    <title>Finova - Personal Finance Tracker</title>
     <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ff6633;
+      }
+      .orange-primary {
+        color: #ff6633;
+      }
+      .btn-orange {
+        background-color: #ff6633;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .btn-orange:hover {
+        background-color: #ff5520;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .stat-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #ff6633;
+        margin-bottom: 0.5rem;
+      }
+      .stat-label {
+        color: #666;
+        font-size: 0.95rem;
+      }
+      .badge-orange {
+        background-color: #fff5f0;
+        color: #ff6633;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      .orange-highlight {
+        color: #ff6633;
+      }
+      .dashboard-preview {
+        background: white;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .dashboard-stat {
+        display: inline-block;
+        margin-right: 2rem;
+        margin-bottom: 1rem;
+      }
+      .dashboard-stat-label {
+        font-size: 0.85rem;
+        color: #999;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .dashboard-stat-value {
+        font-size: 1.75rem;
+        font-weight: bold;
+      }
+      .signup-section {
+        background-color: #fff5f0;
+        padding: 4rem 2rem;
+        text-align: center;
+      }
+      .signup-input {
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        width: 300px;
+        max-width: 100%;
+      }
+      .signup-button {
+        background-color: #ff6633;
+        color: white;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-left: 0.5rem;
+      }
+      .signup-button:hover {
+        background-color: #ff5520;
+      }
+      .social-login {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+      }
+      .social-btn {
+        padding: 0.75rem 2rem;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .social-btn:hover {
+        background-color: #f5f5f5;
+      }
+      .footer-links {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+      }
+      .footer-links a {
+        color: #666;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .footer-links a:hover {
+        color: #ff6633;
+      }
+      @media (max-width: 768px) {
+        .section-title {
+          font-size: 2rem;
+        }
+        .stat-card {
+          margin-bottom: 1rem;
+        }
+        .signup-input {
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+        .signup-button {
+          margin-left: 0;
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- Navigation Bar -->
-    <nav class="container flex justify-between items-center py-4" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+    <nav
+      class="flex justify-between items-center px-6 py-4"
+      style="background: white; border-bottom: 1px solid #f0f0f0"
+    >
       <div class="flex items-center gap-2">
-        
-        <span class="font-bold text-xl tracking-tight">Finova AI</span>
+        <span class="logo-text">Finova</span>
       </div>
-      <div class="flex gap-4">
-        <a href="/pages/auth/login.html" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Login</a>
-        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 0.5rem 1rem;">Get Started</a>
+      <div class="flex items-center gap-4">
+        <select id="langSwitcher" class="btn" style="padding: 0.5rem; border: 1px solid #ddd; background: white; border-radius: 0.375rem; font-weight: 500; cursor: pointer;">
+          <option value="en">English 🇬🇧</option>
+          <option value="id">Indonesia 🇮🇩</option>
+        </select>
+        <a
+          href="/pages/auth/login.html"
+          style="color: #666; text-decoration: none; font-weight: 500"
+          data-i18n="nav-features"
+          >Features</a
+        >
+        <a
+          href="/pages/auth/login.html"
+          style="color: #666; text-decoration: none; font-weight: 500"
+          data-i18n="nav-pricing"
+          >Pricing</a
+        >
+        <a
+          href="/pages/auth/login.html"
+          class="btn btn-secondary"
+          style="padding: 0.5rem 1rem"
+          data-i18n="nav-login"
+          >Log in</a
+        >
+        <button class="btn-orange" data-i18n="nav-start">Start free</button>
       </div>
     </nav>
 
-    <!-- Hero Section -->
-    <main class="container flex flex-col items-center justify-center text-center animate-fade-in" style="min-height: 80vh; padding-top: 4rem;">
-      <div class="badge badge-success mb-6">✨ New AI Insights Engine Live</div>
-      
-      <h1 class="mb-6" style="font-size: 3.5rem; line-height: 1.1; max-width: 800px;">
-        Master Your Finances with <br />
-        <span class="text-gradient">Intelligent Automation</span>
-      </h1>
-      
-      <p class="text-secondary text-lg mb-8" style="max-width: 600px;">
-        Finova AI automatically categorizes your expenses, predicts future trends, and helps you build wealth effortlessly.
-      </p>
-      
-      <div class="flex flex-wrap justify-center gap-4 mb-12">
-        <a href="/pages/auth/login.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
-          Start Tracking Free
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+    <!-- Hero Section - The Uncomfortable Truth -->
+    <section
+      style="
+        padding: 4rem 2rem;
+        text-align: center;
+        background: linear-gradient(to bottom, #ffffff, #fafafa);
+      "
+    >
+      <div class="container" style="max-width: 1200px; margin: 0 auto">
+        <div class="badge-orange" data-i18n="hero-badge">The Uncomfortable Truth</div>
+        <h1 class="section-title" style="margin-top: 2rem; color: #1a1a1a" data-i18n="hero-title">
+          You're Leaving<br />
+          <span class="orange-highlight">Money Behind</span>
+        </h1>
+        <p
+          style="
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 1.5rem auto;
+          "
+          data-i18n="hero-desc"
+        >
+          Every year, millions lose thousands to invisible leaks in their
+          finances. Here's what you might be missing.
+        </p>
 
-      <!-- Feature Highlights -->
-      <div class="grid md:grid-cols-3 gap-6 w-full text-left" style="max-width: 1000px; margin-top: 2rem;">
-        <div class="glass-panel p-6">
-          <div class="card-icon" style="color: var(--color-primary);">🤖</div>
-          <h3 class="text-lg mb-2">AI Categorization</h3>
-          <p class="text-muted text-sm">Automatically sorts your transactions into tax-friendly categories without manual effort.</p>
-        </div>
-        <div class="glass-panel p-6">
-          <div class="card-icon" style="color: var(--color-secondary);">📈</div>
-          <h3 class="text-lg mb-2">Smart Predictions</h3>
-          <p class="text-muted text-sm">Forecast your end-of-month balance and get alerts before you overspend your budget.</p>
-        </div>
-        <div class="glass-panel p-6">
-          <div class="card-icon" style="color: var(--color-accent);">🔒</div>
-          <h3 class="text-lg mb-2">Bank-Grade Security</h3>
-          <p class="text-muted text-sm">Your data is encrypted and secure. We never sell your personal financial information.</p>
+        <!-- Statistics -->
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+          "
+        >
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">$1,200</div>
+            <div class="stat-label" data-i18n="stat-loss">
+              Average yearly loss from forgotten subscriptions
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-value">73%</div>
+            <div class="stat-label" data-i18n="stat-confusion">
+              of people don't know where their money goes
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-value">8hrs</div>
+            <div class="stat-label" data-i18n="stat-time">
+              spent monthly on manual finance tracking
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-value">$340B</div>
+            <div class="stat-label" data-i18n="stat-rewards">left unclaimed in rewards every year</div>
+          </div>
         </div>
       </div>
-    </main>
+    </section>
 
-    <footer class="container text-center py-8 text-muted text-sm mt-8 border-t" style="border-top: 1px solid var(--border-color);">
-      &copy; 2026 Finova AI. Designed for a modern web experience.
+    <!-- Dashboard Section - Full Visibility -->
+    <section style="padding: 4rem 2rem; background: white">
+      <div
+        class="container"
+        style="max-width: 1200px; margin: 0 auto; text-align: center"
+      >
+        <div class="badge-orange" data-i18n="vis-badge">Full Visibility</div>
+        <h2 class="section-title" style="margin-top: 2rem" data-i18n="vis-title">
+          Your Finances,<br />
+          <span class="orange-highlight">Beautifully Clear</span>
+        </h2>
+        <p
+          style="
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 1.5rem auto;
+          "
+          data-i18n="vis-desc-1"
+        >
+          No more spreadsheets. No more confusion. See income, expenses,
+          budgets, and goals in one place.
+        </p>
+        <p style="color: #999; font-size: 1rem; margin-top: 1rem" data-i18n="vis-desc-2">
+          And with Finova, you don't just see your money—you discover what
+          you're missing.
+        </p>
+
+        <!-- Dashboard Preview -->
+        <div
+          class="dashboard-preview"
+          style="margin-top: 2rem; text-align: left"
+        >
+          <div
+            style="
+              margin-bottom: 1.5rem;
+              border-bottom: 1px solid #f0f0f0;
+              padding-bottom: 1rem;
+            "
+          >
+            <strong style="font-size: 1.2rem" data-i18n="dash-title">Dashboard</strong>
+            <span style="float: right; color: #666; font-size: 0.9rem"
+              ><span data-i18n="dash-period">Period</span> <strong>February 2026</strong> <span data-i18n="dash-range">Range</span></span
+            >
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+              gap: 1.5rem;
+            "
+          >
+            <div class="dashboard-stat">
+              <div class="dashboard-stat-label" style="color: #00a86b" data-i18n="stat-income">
+                Income
+              </div>
+              <div class="dashboard-stat-value" style="color: #00a86b">
+                $10,100
+              </div>
+              <div style="color: #00a86b; font-size: 0.85rem">↑ 4%</div>
+            </div>
+            <div class="dashboard-stat">
+              <div class="dashboard-stat-label" style="color: #ff4444" data-i18n="stat-expenses">
+                Expenses
+              </div>
+              <div class="dashboard-stat-value" style="color: #ff4444">
+                $2,400.42
+              </div>
+              <div style="color: #ff4444; font-size: 0.85rem">↓ 4%</div>
+            </div>
+            <div class="dashboard-stat">
+              <div class="dashboard-stat-label" style="color: #4169e1" data-i18n="stat-balance">
+                Balance
+              </div>
+              <div class="dashboard-stat-value" style="color: #4169e1">
+                $7,699.58
+              </div>
+            </div>
+            <div class="dashboard-stat">
+              <div class="dashboard-stat-label" style="color: #00a86b" data-i18n="stat-ihave">
+                I Have
+              </div>
+              <div class="dashboard-stat-value" style="color: #00a86b">
+                A$3,500
+              </div>
+            </div>
+            <div class="dashboard-stat">
+              <div class="dashboard-stat-label" style="color: #ff4444" data-i18n="stat-iowe">
+                I Owe
+              </div>
+              <div class="dashboard-stat-value" style="color: #ff4444">
+                A$1,250
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              margin-top: 1.5rem;
+              padding-top: 1rem;
+              border-top: 1px solid #f0f0f0;
+            "
+          >
+            <button
+              style="
+                background: #f5f5f5;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 0.25rem;
+                cursor: pointer;
+                margin-right: 0.5rem;
+                font-weight: 500;
+              "
+            >
+              Overview
+            </button>
+            <button
+              style="
+                background: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                color: #666;
+              "
+            >
+              Income
+            </button>
+            <button
+              style="
+                background: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                color: #666;
+              "
+            >
+              Expenses
+            </button>
+            <button
+              style="
+                background: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                color: #666;
+              "
+            >
+              Budgets
+            </button>
+            <button
+              style="
+                background: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                color: #666;
+              "
+            >
+              Goals
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section class="signup-section">
+      <div class="container" style="max-width: 600px; margin: 0 auto">
+        <h2 class="section-title" style="margin-bottom: 2rem" data-i18n="signup-title">
+          Start Your Journey Today
+        </h2>
+
+        <div
+          style="
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <input
+            type="email"
+            class="signup-input"
+            placeholder="you@example.com"
+          />
+          <button class="signup-button" data-i18n="signup-btn">Start for free →</button>
+        </div>
+
+        <div style="color: #999; font-size: 0.9rem; margin-bottom: 1.5rem" data-i18n="signup-or">
+          OR CONTINUE WITH
+        </div>
+
+        <div class="social-login">
+          <button class="social-btn"><span>🔵</span> Google</button>
+          <button class="social-btn"><span>⊞</span> Microsoft</button>
+        </div>
+
+        <div style="color: #666; font-size: 0.85rem; margin-top: 1.5rem">
+          <span style="margin-right: 1rem" data-i18n="perk-1">✓ Free forever</span>
+          <span style="margin-right: 1rem" data-i18n="perk-2">✓ No credit card</span>
+          <span
+            ><span data-i18n="perk-3">Already a member?</span>
+            <a
+              href="/pages/auth/login.html"
+              style="color: #ff6633; text-decoration: none; font-weight: 600"
+              data-i18n="perk-login"
+              >Log in</a
+            ></span
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #f9f9f9; padding: 3rem 2rem; text-align: center">
+      <div class="container" style="max-width: 1200px; margin: 0 auto">
+        <div style="margin-bottom: 2rem">
+          <span class="logo-text">Finova</span>
+          <p style="color: #666; margin-top: 0.5rem" data-i18n="footer-desc">
+            Your AI-powered personal finance companion.
+          </p>
+          <p style="color: #999; font-size: 0.9rem" data-i18n="footer-slogan">
+            Making financial clarity accessible to everyone.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <div>
+            <h4 style="color: #333; margin-bottom: 1rem">LEARN</h4>
+            <div><a href="#">Blog</a></div>
+            <div><a href="#">Guides</a></div>
+          </div>
+          <div>
+            <h4 style="color: #333; margin-bottom: 1rem">FEATURES</h4>
+            <div><a href="#">AI Assistant</a></div>
+            <div><a href="#">Benefits Wallet</a></div>
+            <div><a href="#">Household Plans</a></div>
+          </div>
+          <div>
+            <h4 style="color: #333; margin-bottom: 1rem">COMPANY</h4>
+            <div><a href="#">Pricing</a></div>
+            <div><a href="#">Get the App</a></div>
+            <div><a href="#">Privacy Policy</a></div>
+            <div><a href="#">Terms of Service</a></div>
+            <div><a href="#">Contact Us</a></div>
+          </div>
+        </div>
+
+        <div
+          style="
+            border-top: 1px solid #e0e0e0;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            color: #999;
+            font-size: 0.85rem;
+          "
+        >
+          <p>© 2026 Finova. All rights reserved.</p>
+          <p>
+            Bank-level encryption • SOC 2 compliant infrastructure • GDPR Ready
+          </p>
+        </div>
+      </div>
     </footer>
+
+    <script>
+      const translations = {
+        en: {
+          "nav-features": "Features",
+          "nav-pricing": "Pricing",
+          "nav-login": "Log in",
+          "nav-start": "Start free",
+          "hero-badge": "The Uncomfortable Truth",
+          "hero-title": "You're Leaving Money Behind",
+          "hero-desc": "Every year, millions lose thousands to invisible leaks in their finances. Here's what you might be missing.",
+          "stat-loss": "Average yearly loss from forgotten subscriptions",
+          "stat-confusion": "of people don't know where their money goes",
+          "stat-time": "spent monthly on manual finance tracking",
+          "stat-rewards": "left unclaimed in rewards every year",
+          "vis-badge": "Full Visibility",
+          "vis-title": "Your Finances, Beautifully Clear",
+          "vis-desc-1": "No more spreadsheets. No more confusion. See income, expenses, budgets, and goals in one place.",
+          "vis-desc-2": "And with Finova, you don't just see your money—you discover what you're missing.",
+          "dash-title": "Dashboard",
+          "dash-period": "Period",
+          "dash-range": "Range",
+          "stat-income": "Income",
+          "stat-expenses": "Expenses",
+          "stat-balance": "Balance",
+          "stat-ihave": "I Have",
+          "stat-iowe": "I Owe",
+          "signup-title": "Start Your Journey Today",
+          "signup-btn": "Start for free →",
+          "signup-or": "OR CONTINUE WITH",
+          "perk-1": "✓ Free forever",
+          "perk-2": "✓ No credit card",
+          "perk-3": "Already a member?",
+          "perk-login": "Log in",
+          "footer-desc": "Your AI-powered personal finance companion.",
+          "footer-slogan": "Making financial clarity accessible to everyone."
+        },
+        id: {
+          "nav-features": "Fitur",
+          "nav-pricing": "Harga",
+          "nav-login": "Masuk",
+          "nav-start": "Mulai Gratis",
+          "hero-badge": "Kenyataan yang Kurang Nyaman",
+          "hero-title": "Anda Kehilangan<br><span class=\"orange-highlight\">Uang Anda</span>",
+          "hero-desc": "Setiap tahun, jutaan orang kehilangan ribuan dolar karena kebocoran halus dalam keuangan mereka. Inilah yang mungkin Anda lewatkan.",
+          "stat-loss": "Rata-rata kerugian tahunan dari langganan yang terlupakan",
+          "stat-confusion": "orang tidak tahu ke mana uang mereka pergi",
+          "stat-time": "dihabiskan setiap bulan untuk pelacakan manual",
+          "stat-rewards": "hadiah tidak diklaim setiap tahun",
+          "vis-badge": "Visibilitas Penuh",
+          "vis-title": "Keuangan Anda,<br><span class=\"orange-highlight\">Sangat Jelas</span>",
+          "vis-desc-1": "Tidak ada lagi spreadsheet. Tidak ada lagi kebingungan. Lihat pendapatan, pengeluaran, anggaran, dan tujuan di satu tempat.",
+          "vis-desc-2": "Dengan Finova, Anda tidak hanya melihat uang Anda—Anda menemukan apa yang Anda lewatkan.",
+          "dash-title": "Dashboard",
+          "dash-period": "Periode",
+          "dash-range": "Rentang",
+          "stat-income": "Pemasukan",
+          "stat-expenses": "Pengeluaran",
+          "stat-balance": "Saldo",
+          "stat-ihave": "Saya Punya",
+          "stat-iowe": "Saya Hutang",
+          "signup-title": "Mulai Perjalanan Anda Hari ini",
+          "signup-btn": "Mulai gratis →",
+          "signup-or": "ATAU LANJUTKAN DENGAN",
+          "perk-1": "✓ Gratis selamanya",
+          "perk-2": "✓ Tanpa kartu kredit",
+          "perk-3": "Sudah punya akun?",
+          "perk-login": "Masuk",
+          "footer-desc": "Pendamping keuangan pribadi berbasis AI Anda.",
+          "footer-slogan": "Menjadikan kejelasan finansial dapat diakses oleh semua orang."
+        }
+      };
+
+      function updateLanguage(lang) {
+        document.querySelectorAll("[data-i18n]").forEach(el => {
+          const key = el.getAttribute("data-i18n");
+          if (translations[lang] && translations[lang][key]) {
+            el.innerHTML = translations[lang][key];
+          }
+        });
+        localStorage.setItem("selectedLang", lang);
+      }
+
+      const switcher = document.getElementById("langSwitcher");
+      switcher.addEventListener("change", (e) => {
+        updateLanguage(e.target.value);
+      });
+
+      // Initial load
+      const savedLang = localStorage.getItem("selectedLang") || "en";
+      switcher.value = savedLang;
+      updateLanguage(savedLang);
+    </script>
     <script type="module" src="/src/js/app.js"></script>
   </body>
 </html>

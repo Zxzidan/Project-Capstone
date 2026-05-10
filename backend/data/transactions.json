@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "1778398552683",
+    "userId": "1777637136329",
+    "amount": 1000000,
+    "type": "Expense",
+    "category": "Makanan & Minuman",
+    "date": "2026-05-13",
+    "notes": "untuk makanan",
+    "createdAt": "2026-05-10T07:35:52.683Z"
+  },
+  {
+    "id": "1778398701643",
+    "userId": "1777637136329",
+    "amount": 500000,
+    "type": "Expense",
+    "category": "Makanan & Minuman",
+    "date": "2026-05-10",
+    "notes": "Makan Siang",
+    "createdAt": "2026-05-10T07:38:21.643Z"
+  },
+  {
+    "id": "1778398927271",
+    "userId": "1777637136329",
+    "amount": 2000000,
+    "type": "Income",
+    "category": "Lainnya",
+    "date": "2026-05-13",
+    "notes": "sangu",
+    "createdAt": "2026-05-10T07:42:07.271Z"
+  }
+]

@@ -39,6 +39,16 @@ export const api = {
     return res.json();
   },
 
+  async updateUserProfile(userId, profileData) {
+    const res = await fetch(`${API_URL}/auth/profile`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, ...profileData })
+    });
+    if (!res.ok) throw new Error('Failed to update profile');
+    return res.json();
+  },
+
   // --- INSIGHTS ---
   async getInsights(transactions) {
     const res = await fetch(`${API_URL}/insights`, {
