@@ -38,15 +38,23 @@ const writeData = (file, data) => fs.writeFileSync(file, JSON.stringify(data, nu
 // AUTHENTICATION API
 // ==========================================
 app.post('/api/auth/signup', (req, res) => {
-  const { email, password, name } = req.body;
-  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+  const { email, username, password, ...profileData } = req.body;
+  if (!email || !password || !username) return res.status(400).json({ error: 'Email, username, and password required' });
   
   const users = readData(USERS_FILE);
-  if (users.find(u => u.email === email)) {
-    return res.status(400).json({ error: 'Email ini sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda.' });
+  if (users.find(u => u.email === email || u.username === username)) {
+    return res.status(400).json({ error: 'Email atau Username ini sudah terdaftar. Silakan masuk ke akun Anda.' });
   }
 
-  const newUser = { id: Date.now().toString(), email, password, name: name || 'User' };
+  const newUser = { 
+    id: Date.now().toString(), 
+    email, 
+    username,
+    password, 
+    name: profileData.name || username,
+    ...profileData,
+    onboarded: true // Skip separate onboarding
+  };
   users.push(newUser);
   writeData(USERS_FILE, users);
 
@@ -57,10 +65,19 @@ app.post('/api/auth/signup', (req, res) => {
 
 app.post('/api/auth/login', (req, res) => {
   const { email, password } = req.body;
-  const users = readData(USERS_FILE);
-  const user = users.find(u => u.email === email && u.password === password);
+  // 'email' variable here actually contains either email or username from the frontend
+  const emailOrUsername = email; 
   
-  if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+  const users = readData(USERS_FILE);
+  const user = users.find(u => u.email === emailOrUsername || u.username === emailOrUsername);
+  
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  
+  if (user.password !== password) {
+    return res.status(401).json({ error: 'Invalid password' });
+  }
   
   const { password: _, ...userWithoutPassword } = user;
   res.json({ message: 'Login successful', user: userWithoutPassword });

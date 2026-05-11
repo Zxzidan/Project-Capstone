@@ -20,19 +20,18 @@ export const app = {
   checkAuthGuard() {
     const path = window.location.pathname;
     const isAuthPage = path.includes('login.html') || path.includes('signup.html');
-    const isLandingPage = path.endsWith('/') || path.endsWith('index.html');
     
-    if (!this.user && !isAuthPage && !isLandingPage) {
+    // Improved landing page detection
+    const isLandingPage = path === '/' || path === '/index.html' || path.endsWith('/index.html') || path === '' || path === '/landing.html';
+    
+    if (isLandingPage) {
+      return;
+    }
+
+    if (!this.user && !isAuthPage) {
       window.location.href = '/pages/auth/login.html';
     } else if (this.user) {
-      // Check if onboarded
-      if (!this.user.onboarded && !path.includes('onboarding.html')) {
-        window.location.href = '/pages/auth/onboarding.html';
-        return;
-      }
-      
       // If logged in and on login/signup page, go to dashboard
-      // But stay on landing page if already there
       if (isAuthPage) {
         window.location.href = '/pages/desktop/dashboard.html';
       }
@@ -48,6 +47,24 @@ export const app = {
   bindEvents() {
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
+      // Pre-fill email/username and password if saved in sessionStorage
+      const prefillData = sessionStorage.getItem('tempLoginPrefill');
+      if (prefillData) {
+        try {
+          const data = JSON.parse(prefillData);
+          if (data.username && loginForm.email) loginForm.email.value = data.username;
+          if (data.password && loginForm.password) loginForm.password.value = data.password;
+        } catch (e) {}
+        sessionStorage.removeItem('tempLoginPrefill');
+      } else {
+        // Fallback to URL param for email if present
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailParam = urlParams.get('email');
+        if (emailParam && loginForm.email) {
+          loginForm.email.value = emailParam;
+        }
+      }
+
       loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = e.target.email.value;
@@ -57,7 +74,11 @@ export const app = {
           localStorage.setItem('currentUser', JSON.stringify(res.user));
           window.location.href = '/pages/desktop/dashboard.html';
         } catch (error) {
-          alert('Login failed: ' + error.message);
+          if (error.message === 'User not found') {
+            window.location.href = `/pages/auth/signup.html?email=${encodeURIComponent(email)}`;
+          } else {
+            alert('Login failed: ' + error.message);
+          }
         }
       });
     }
@@ -66,17 +87,57 @@ export const app = {
     if (signupForm) {
       signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = e.target.name.value;
-        const email = e.target.email.value;
-        const password = e.target.password.value;
+        const formData = new FormData(e.target);
+        const signupData = {};
+        formData.forEach((value, key) => {
+          if (['monthlyIncome', 'assetValue', 'loanAmount', 'monthlyDebt'].includes(key)) {
+            signupData[key] = parseFloat(value.replace(/\./g, '')) || 0;
+          } else {
+            signupData[key] = value;
+          }
+        });
+
         try {
-          const res = await api.signup(email, password, name);
+          const res = await api.signup(signupData);
           localStorage.setItem('currentUser', JSON.stringify(res.user));
-          window.location.href = '/pages/auth/onboarding.html';
+          // Dashboard now since onboarding is skipped
+          window.location.href = '/pages/desktop/dashboard.html';
         } catch (error) {
-          alert('Signup failed: ' + error.message);
+          if (error.message.includes('sudah terdaftar')) {
+            sessionStorage.setItem('tempLoginPrefill', JSON.stringify({
+              username: signupData.username || signupData.email,
+              password: signupData.password
+            }));
+            window.location.href = '/pages/auth/login.html';
+          } else {
+            alert('Signup failed: ' + error.message);
+          }
         }
       });
+      
+      // Save partial credentials if they click a "Log in" link directly
+      const loginLinks = document.querySelectorAll('a[href="/pages/auth/login.html"]');
+      loginLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          const email = signupForm.email ? signupForm.email.value : '';
+          const username = signupForm.username ? signupForm.username.value : '';
+          const password = signupForm.password ? signupForm.password.value : '';
+          if (email || username || password) {
+            sessionStorage.setItem('tempLoginPrefill', JSON.stringify({
+              username: username || email,
+              password: password
+            }));
+          }
+        });
+      });
+
+      // Pre-fill email if passed in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailParam = urlParams.get('email');
+      if (emailParam) {
+        if(signupForm.email) signupForm.email.value = emailParam;
+        else if(signupForm.username) signupForm.username.value = emailParam;
+      }
     }
 
     const addTxForm = document.getElementById('addTxForm');
@@ -134,7 +195,7 @@ export const app = {
     if (logoutBtn) {
       logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('currentUser');
-        window.location.href = '/pages/auth/login.html';
+        window.location.href = '/';
       });
     }
   },
