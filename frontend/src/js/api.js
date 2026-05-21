@@ -1,4 +1,5 @@
-const API_URL = 'https://project-capstone-peach.vercel.app/_/backend/api';
+//  Ganti ke domain yang aktif sekarang
+const API_URL = 'https://project-capstone-d2oy.vercel.app/_backend/api';
 
 export const api = {
   // --- AUTH ---
