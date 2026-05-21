@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'https://project-capstone-peach.vercel.app/_/backend/api';
 
 export const api = {
   // --- AUTH ---
