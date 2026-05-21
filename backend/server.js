@@ -1,191 +1,150 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const mongoose = require('mongoose');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Database paths
-const TRANSACTIONS_FILE = path.join(__dirname, 'data', 'transactions.json');
-const USERS_FILE = path.join(__dirname, 'data', 'users.json');
+// Connect MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB error:', err));
 
-// Initialize empty JSON files if they don't exist
-const initializeDB = () => {
-  const dataDir = path.join(__dirname, 'data');
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir);
-  }
-  if (!fs.existsSync(TRANSACTIONS_FILE)) {
-    fs.writeFileSync(TRANSACTIONS_FILE, JSON.stringify([]));
-  }
-  if (!fs.existsSync(USERS_FILE)) {
-    fs.writeFileSync(USERS_FILE, JSON.stringify([]));
-  }
-};
-initializeDB();
+// ==========================================
+// SCHEMAS
+// ==========================================
+const userSchema = new mongoose.Schema({
+  id: String,
+  email: { type: String, unique: true },
+  username: { type: String, unique: true },
+  password: String,
+  name: String,
+  onboarded: Boolean
+}, { strict: false });
 
-// Helper functions
-const readData = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
-const writeData = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2));
+const transactionSchema = new mongoose.Schema({
+  userId: String,
+  amount: Number,
+  type: String,
+  category: String,
+  date: String,
+  notes: String,
+  createdAt: String
+});
+
+const User = mongoose.model('User', userSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
 // ==========================================
 // AUTHENTICATION API
 // ==========================================
-app.post('/api/auth/signup', (req, res) => {
+app.post('/api/auth/signup', async (req, res) => {
   const { email, username, password, ...profileData } = req.body;
-  if (!email || !password || !username) return res.status(400).json({ error: 'Email, username, and password required' });
-  
-  const users = readData(USERS_FILE);
-  if (users.find(u => u.email === email || u.username === username)) {
-    return res.status(400).json({ error: 'Email atau Username ini sudah terdaftar. Silakan masuk ke akun Anda.' });
-  }
+  if (!email || !password || !username)
+    return res.status(400).json({ error: 'Email, username, and password required' });
 
-  const newUser = { 
-    id: Date.now().toString(), 
-    email, 
-    username,
-    password, 
+  const existing = await User.findOne({ $or: [{ email }, { username }] });
+  if (existing)
+    return res.status(400).json({ error: 'Email atau Username ini sudah terdaftar.' });
+
+  const newUser = new User({
+    id: Date.now().toString(),
+    email, username, password,
     name: profileData.name || username,
     ...profileData,
-    onboarded: true // Skip separate onboarding
-  };
-  users.push(newUser);
-  writeData(USERS_FILE, users);
+    onboarded: true
+  });
+  await newUser.save();
 
-  // Exclude password from response
-  const { password: _, ...userWithoutPassword } = newUser;
+  const { password: _, ...userWithoutPassword } = newUser.toObject();
   res.status(201).json({ message: 'User created successfully', user: userWithoutPassword });
 });
 
-app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
-  // 'email' variable here actually contains either email or username from the frontend
-  const emailOrUsername = email; 
-  
-  const users = readData(USERS_FILE);
-  const user = users.find(u => u.email === emailOrUsername || u.username === emailOrUsername);
-  
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' });
-  }
-  
-  if (user.password !== password) {
+app.post('/api/auth/login', async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ $or: [{ email }, { username: email }] });
+
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  if (user.password !== req.body.password)
     return res.status(401).json({ error: 'Invalid password' });
-  }
-  
-  const { password: _, ...userWithoutPassword } = user;
+
+  const { password: _, ...userWithoutPassword } = user.toObject();
   res.json({ message: 'Login successful', user: userWithoutPassword });
 });
 
-app.put('/api/auth/profile', (req, res) => {
+app.put('/api/auth/profile', async (req, res) => {
   const { userId, ...profileData } = req.body;
   if (!userId) return res.status(400).json({ error: 'User ID is required' });
 
-  const users = readData(USERS_FILE);
-  const userIndex = users.findIndex(u => u.id === userId);
-  
-  if (userIndex === -1) return res.status(404).json({ error: 'User not found' });
+  const user = await User.findOneAndUpdate(
+    { id: userId },
+    { ...profileData, onboarded: true },
+    { new: true }
+  );
+  if (!user) return res.status(404).json({ error: 'User not found' });
 
-  // Update user with profile data and mark as onboarded
-  users[userIndex] = { ...users[userIndex], ...profileData, onboarded: true };
-  writeData(USERS_FILE, users);
-
-  const { password: _, ...userWithoutPassword } = users[userIndex];
-  res.json({ message: 'Profile updated successfully', user: userWithoutPassword });
+  const { password: _, ...userWithoutPassword } = user.toObject();
+  res.json({ message: 'Profile updated', user: userWithoutPassword });
 });
 
 // ==========================================
 // TRANSACTIONS API
 // ==========================================
-app.get('/api/transactions', (req, res) => {
-  const userId = req.query.userId;
-  const transactions = readData(TRANSACTIONS_FILE);
-  
-  if (userId) {
-    res.json(transactions.filter(t => t.userId === userId));
-  } else {
-    res.json(transactions);
-  }
+app.get('/api/transactions', async (req, res) => {
+  const { userId } = req.query;
+  const filter = userId ? { userId } : {};
+  const transactions = await Transaction.find(filter);
+  res.json(transactions);
 });
 
-app.post('/api/transactions', (req, res) => {
+app.post('/api/transactions', async (req, res) => {
   const { userId, amount, type, category, date, notes } = req.body;
-  if (!userId || !amount || !type || !category) {
+  if (!userId || !amount || !type || !category)
     return res.status(400).json({ error: 'Missing required fields' });
-  }
 
-  const transactions = readData(TRANSACTIONS_FILE);
-  const newTransaction = {
-    id: Date.now().toString(),
-    userId,
-    amount: parseFloat(amount),
-    type,
-    category,
+  const newTransaction = new Transaction({
+    userId, amount: parseFloat(amount), type, category,
     date: date || new Date().toISOString().split('T')[0],
     notes: notes || '',
     createdAt: new Date().toISOString()
-  };
-
-  transactions.push(newTransaction);
-  writeData(TRANSACTIONS_FILE, transactions);
+  });
+  await newTransaction.save();
   res.status(201).json(newTransaction);
 });
 
 // ==========================================
-// AI INSIGHTS API
+// AI INSIGHTS API (tidak berubah)
 // ==========================================
 app.post('/api/insights', async (req, res) => {
   const { transactions } = req.body;
-  
   if (!transactions || transactions.length === 0) {
-    return res.json({
-      insights: [
-        { type: 'info', title: 'Belum Ada Data', message: 'Tambahkan transaksi untuk mendapatkan analisis AI.' }
-      ]
-    });
+    return res.json({ insights: [{ type: 'info', title: 'Belum Ada Data', message: 'Tambahkan transaksi untuk mendapatkan analisis AI.' }] });
   }
 
-  // Calculate some basic stats to pass to AI or use in mock
   const expenses = transactions.filter(t => t.type === 'Expense').reduce((acc, curr) => acc + curr.amount, 0);
   const income = transactions.filter(t => t.type === 'Income').reduce((acc, curr) => acc + curr.amount, 0);
 
-  // If we had a real GEMINI API key set in env:
-  // const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  
-  // Since user said they don't have an API key, we will simulate an AI response 
-  // based on the actual transactions sent to the backend.
-  setTimeout(() => {
-    const insights = [];
-    
-    if (expenses > income && income > 0) {
-      insights.push({ type: 'warning', title: '⚠️ Pengeluaran Melebihi Pendapatan', message: `Pengeluaran Anda ($${expenses}) lebih besar dari pendapatan ($${income}). Coba kurangi pengeluaran tidak penting.` });
-    } else if (income > expenses && expenses > 0) {
-      insights.push({ type: 'success', title: '✅ Keuangan Sehat', message: `Bagus! Anda berhasil menabung $${(income - expenses).toFixed(2)} sejauh ini.` });
-    }
+  const insights = [];
+  if (expenses > income && income > 0) {
+    insights.push({ type: 'warning', title: '⚠️ Pengeluaran Melebihi Pendapatan', message: `Pengeluaran Anda lebih besar dari pendapatan. Coba kurangi pengeluaran tidak penting.` });
+  } else if (income > expenses && expenses > 0) {
+    insights.push({ type: 'success', title: '✅ Keuangan Sehat', message: `Bagus! Anda berhasil menabung Rp${(income - expenses).toFixed(2)}.` });
+  }
 
-    // Category analysis
-    const categories = {};
-    transactions.filter(t => t.type === 'Expense').forEach(t => {
-      categories[t.category] = (categories[t.category] || 0) + t.amount;
-    });
+  const categories = {};
+  transactions.filter(t => t.type === 'Expense').forEach(t => {
+    categories[t.category] = (categories[t.category] || 0) + t.amount;
+  });
+  const sortedCats = Object.keys(categories).sort((a, b) => categories[b] - categories[a]);
+  if (sortedCats.length > 0) {
+    insights.push({ type: 'info', title: '🤖 Kategori Terbesar', message: `Kategori pengeluaran terbesar Anda adalah ${sortedCats[0]}.` });
+  }
 
-    const sortedCats = Object.keys(categories).sort((a, b) => categories[b] - categories[a]);
-    if (sortedCats.length > 0) {
-      insights.push({ type: 'info', title: '🤖 Kategori Terbesar', message: `Kategori pengeluaran terbesar Anda adalah ${sortedCats[0]} sebesar $${categories[sortedCats[0]].toFixed(2)}.` });
-    } else {
-      insights.push({ type: 'info', title: '🤖 Analisis AI', message: `Pengeluaran Anda tercatat dengan baik, pertahankan kebiasaan mencatat!` });
-    }
-
-    res.json({ insights });
-  }, 1000); // Simulate network/AI delay
+  res.json({ insights });
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend Server is running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
