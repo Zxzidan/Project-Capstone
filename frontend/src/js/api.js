@@ -1,4 +1,4 @@
-const API_URL = '/_backend/api';
+const API_URL = '/api';
 
 // Helper untuk safe parsing response
 async function safeJson(res) {

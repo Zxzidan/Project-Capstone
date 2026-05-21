@@ -186,6 +186,11 @@ app.post('/api/insights', async (req, res) => {
 });
 
 // ==========================================
-// EXPORT untuk Vercel Serverless
+// LOCAL DEV vs VERCEL
 // ==========================================
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
 module.exports = app;
