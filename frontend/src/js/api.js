@@ -1,5 +1,14 @@
-//  Ganti ke domain yang aktif sekarang
-const API_URL = 'https://project-capstone-d2oy.vercel.app/_backend/api';
+const API_URL = '/_backend/api';
+
+// Helper untuk safe parsing response
+async function safeJson(res) {
+  const text = await res.text();
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    return {};
+  }
+}
 
 export const api = {
   // --- AUTH ---
@@ -9,8 +18,9 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
-    if (!res.ok) throw new Error((await res.json()).error);
-    return res.json();
+    const data = await safeJson(res);
+    if (!res.ok) throw new Error(data.error || `Login failed: ${res.status}`);
+    return data;
   },
 
   async signup(data) {
@@ -19,15 +29,17 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    if (!res.ok) throw new Error((await res.json()).error);
-    return res.json();
+    const result = await safeJson(res);
+    if (!res.ok) throw new Error(result.error || `Signup failed: ${res.status}`);
+    return result;
   },
 
   // --- TRANSACTIONS ---
   async getTransactions(userId) {
     const res = await fetch(`${API_URL}/transactions?userId=${userId}`);
-    if (!res.ok) throw new Error('Failed to fetch transactions');
-    return res.json();
+    const data = await safeJson(res);
+    if (!res.ok) throw new Error(data.error || 'Failed to fetch transactions');
+    return data;
   },
 
   async addTransaction(data) {
@@ -36,8 +48,9 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    if (!res.ok) throw new Error('Failed to add transaction');
-    return res.json();
+    const result = await safeJson(res);
+    if (!res.ok) throw new Error(result.error || 'Failed to add transaction');
+    return result;
   },
 
   async updateUserProfile(userId, profileData) {
@@ -46,8 +59,9 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, ...profileData })
     });
-    if (!res.ok) throw new Error('Failed to update profile');
-    return res.json();
+    const data = await safeJson(res);
+    if (!res.ok) throw new Error(data.error || 'Failed to update profile');
+    return data;
   },
 
   // --- INSIGHTS ---
@@ -57,7 +71,8 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ transactions })
     });
-    if (!res.ok) throw new Error('Failed to get insights');
-    return res.json();
+    const data = await safeJson(res);
+    if (!res.ok) throw new Error(data.error || 'Failed to get insights');
+    return data;
   }
 };
