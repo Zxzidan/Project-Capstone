@@ -115,83 +115,100 @@
           <div class="avatar" style="width: 32px; height: 32px;">D</div>
           <span style="font-weight: 600;">Hi, Dandi</span>
         </div>
-        
       </header>
 
-      <!-- Main Balance Card -->
-      <div class="main-balance-card">
-        <div style="color: rgba(255,255,255,0.9); font-size: 0.875rem;">Total Balance</div>
-        <h1 style="color: var(--color-text-primary); margin: 8px 0; font-size: 2.5rem;">Rp 12.450.000</h1>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <span style="background: rgba(0,0,0,0.08); padding: 4px 8px; border-radius: 12px; font-size: 0.75rem;">+2.5% this month</span>
-        </div>
+      <!-- Setup Blocker / Empty State -->
+      <div id="dashboardEmptyState" class="glass-panel p-6 text-center animate-fade-in" style="display: none; margin: var(--spacing-4); padding: var(--spacing-8) var(--spacing-4);">
+        <div style="font-size: 3rem; margin-bottom: var(--spacing-3);">🎯</div>
+        <h3 class="mb-2">Target Menabung Belum Diatur</h3>
+        <p class="text-secondary mb-4" style="font-size: 0.9rem; line-height: 1.5;">Silakan atur target menabung (Savings Goal) di profil Anda terlebih dahulu untuk mengaktifkan dashboard.</p>
+        <a href="/pages/mobile/profile.html" class="btn btn-primary w-full" style="display: block; text-align: center;">Set Target Menabung</a>
       </div>
 
-      <!-- Quick Actions -->
-      <div class="action-buttons">
-        <a href="/pages/mobile/add-transaction.html" class="action-btn">
-          <span style="font-size: 1.5rem;"></span>
-          Send
-        </a>
-        <a href="#" class="action-btn">
-          <span style="font-size: 1.5rem;"></span>
-          Request
-        </a>
-        <a href="/pages/mobile/add-transaction.html" class="action-btn">
-          <span style="font-size: 1.5rem;"></span>
-          Top Up
-        </a>
-      </div>
+      <div id="dashboardContent">
+        <!-- Main Balance Card -->
+        <div class="main-balance-card">
+          <div style="color: rgba(255,255,255,0.9); font-size: 0.875rem;">Total Balance</div>
+          <h1 style="color: #ffffff; margin: 8px 0; font-size: 2.3rem; font-weight: 800;" id="totalBalance">Rp 0</h1>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span style="background: rgba(255,255,255,0.15); color: #ffffff; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 500;" id="balancePercentage">Rasio Menabung: 0%</span>
+          </div>
+        </div>
 
-      <!-- Recent Transactions -->
-      <div class="transaction-list">
-        <div class="flex justify-between items-center mb-4">
-          <h3 style="margin: 0;">Recent Activity</h3>
-          <a href="#" style="color: var(--color-primary); font-size: 0.875rem;">See All</a>
-        </div>
-        
-        <div class="t-row">
-          <div class="flex items-center gap-3">
-            
+        <!-- Quick Stats (Mobile) -->
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-3); margin: 0 var(--spacing-4) var(--spacing-4);">
+          <div class="glass-panel p-3 flex items-center gap-2" style="background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); align-items: center;">
+            <div style="background: rgba(16,185,129,0.1); color: var(--color-accent); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+              💰
+            </div>
             <div>
-              <div class="font-bold">Whole Foods</div>
-              <div class="text-sm text-muted">Today, 2:45 PM</div>
+              <div class="text-secondary" style="font-size: 0.7rem; line-height: 1.2;">Pemasukan</div>
+              <div class="font-bold" id="totalIncome" style="color: var(--color-accent); font-size: 0.85rem; margin-top: 2px;">Rp 0</div>
+              <div style="font-size: 0.65rem; color: var(--color-text-muted); margin-top: 2px; font-weight: 500;" id="incomePercentage">0% dari target</div>
             </div>
           </div>
-          <div class="font-bold text-danger">-Rp 120.500</div>
-        </div>
-        
-        <div class="t-row">
-          <div class="flex items-center gap-3">
-            
+          <div class="glass-panel p-3 flex items-center gap-2" style="background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); align-items: center;">
+            <div style="background: rgba(239,68,68,0.1); color: var(--color-danger); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+              🛒
+            </div>
             <div>
-              <div class="font-bold">Salary Deposit</div>
-              <div class="text-sm text-muted">Yesterday</div>
+              <div class="text-secondary" style="font-size: 0.7rem; line-height: 1.2;">Pengeluaran</div>
+              <div class="font-bold" id="monthlySpending" style="color: var(--color-danger); font-size: 0.85rem; margin-top: 2px;">Rp 0</div>
+              <div style="font-size: 0.65rem; color: var(--color-text-muted); margin-top: 2px; font-weight: 500;" id="spendingPercentage">0% dari pemasukan</div>
             </div>
           </div>
-          <div class="font-bold text-success">+Rp 4.500.000</div>
         </div>
-        
-        <div class="t-row">
-          <div class="flex items-center gap-3">
-            
+
+        <!-- Savings Goal Card (Mobile) -->
+        <div class="glass-panel p-4" style="margin: 0 var(--spacing-4) var(--spacing-4); background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg);">
+          <div class="flex justify-between items-center mb-2">
             <div>
-              <div class="font-bold">Starbucks</div>
-              <div class="text-sm text-muted">Oct 12</div>
+              <div class="text-secondary" style="font-size: 0.875rem;">Savings Goal</div>
+              <div class="font-bold text-lg" id="savingsGoalValue" style="margin: 2px 0;">Rp 0</div>
             </div>
+            <span class="badge" id="savingsGoalStatus" style="font-size: 0.75rem; padding: 2px 8px;">0% on track</span>
           </div>
-          <div class="font-bold text-danger">-Rp 5.400</div>
+          <div class="w-full bg-gray-200 rounded-full h-1.5" style="background: #eff6ff; overflow: hidden; border: 1px solid var(--border-color);">
+            <div id="savingsGoalProgressBar" class="h-full rounded-full" style="width: 0%; background: var(--color-primary); transition: width var(--transition-normal);"></div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="action-buttons">
+          <a href="/pages/mobile/add-transaction.html" class="action-btn">
+            <span style="font-size: 1.5rem;">💸</span>
+            Send
+          </a>
+          <a href="#" class="action-btn">
+            <span style="font-size: 1.5rem;">📥</span>
+            Request
+          </a>
+          <a href="/pages/mobile/add-transaction.html" class="action-btn">
+            <span style="font-size: 1.5rem;">💵</span>
+            Top Up
+          </a>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="transaction-list">
+          <div class="flex justify-between items-center mb-4">
+            <h3 style="margin: 0;">Recent Activity</h3>
+            <a href="/pages/mobile/history.html" style="color: var(--color-primary); font-size: 0.875rem;">See All</a>
+          </div>
+          <div id="transactionList">
+            <!-- Transactions will be loaded here dynamically -->
+          </div>
         </div>
       </div>
 
       <!-- Bottom Navigation -->
       <nav class="bottom-nav">
         <a href="/pages/mobile/dashboard.html" class="nav-item-mobile active">
-          <span class="nav-icon"></span>
+          <span class="nav-icon">🏠</span>
           <span>Home</span>
         </a>
         <a href="/pages/mobile/insights.html" class="nav-item-mobile">
-          <span class="nav-icon"></span>
+          <span class="nav-icon">📊</span>
           <span>Insights</span>
         </a>
         <a href="/pages/mobile/add-transaction.html" class="nav-item-mobile" style="transform: translateY(-10px);">
@@ -199,16 +216,15 @@
             <span class="nav-icon" style="color: var(--color-text-primary);">+</span>
           </div>
         </a>
-        <a href="#" class="nav-item-mobile">
-          <span class="nav-icon"></span>
-          <span>Cards</span>
+        <a href="/pages/mobile/history.html" class="nav-item-mobile">
+          <span class="nav-icon">⏱️</span>
+          <span>History</span>
         </a>
-        <a href="/index.html" class="nav-item-mobile">
-          <span class="nav-icon"></span>
+        <a href="/pages/mobile/profile.html" class="nav-item-mobile">
+          <span class="nav-icon">👤</span>
           <span>Settings</span>
         </a>
       </nav>
-      
     </div>
     <script type="module" src="/src/js/app.js"></script>
   </body>

@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Finova - Add Transaction</title>
+    <!-- AI Scan Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="/js/finova-ai.js"></script>
     <style>
       .mobile-layout {
         max-width: 480px;
@@ -85,8 +89,8 @@
         min-height: 50vh;
       }
     </style>
-    <script type="module" crossorigin src="/assets/app-ChYESuiU.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/app-DtuVMUl-.css">
+    <script type="module" crossorigin src="/assets/app-Cc8hLvQh.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Db4695YN.css">
   </head>
   <body>
     <div class="mobile-layout animate-fade-in">
@@ -144,9 +148,9 @@
         <div class="form-group mb-8">
           <label class="form-label">Scan Struk / Receipt (Auto-fill)</label>
           <label class="scan-wrapper" style="display: block; border: 1px dashed var(--color-primary); padding: 1rem; text-align: center; border-radius: var(--radius-md); cursor: pointer; background: rgba(59, 130, 246, 0.05); transition: all 0.3s;">
-            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;"></div>
-            <div style="color: var(--color-primary); font-size: 0.875rem; font-weight: 500;">Tap to Scan Receipt</div>
-            <input type="file" accept="image/*" capture="environment" style="display: none;" id="receiptInput" onchange="alert('Receipt scanning AI is processing...')" />
+            <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🧾</div>
+            <div id="scanStatus" style="color: var(--color-primary); font-size: 0.875rem; font-weight: 500;">Tap to Scan Receipt</div>
+            <input type="file" accept="image/*" capture="environment" style="display: none;" id="receiptInput" />
           </label>
         </div>
 
@@ -157,5 +161,62 @@
       </form>
       
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const input = document.getElementById('receiptInput');
+        const status = document.getElementById('scanStatus');
+        
+        // Inisialisasi FinovaAI saat halaman dimuat
+        console.log('Mobile Page Load: Initializing FinovaAI...');
+        try {
+          await FinovaAI.init('/tfjs/model.json');
+        } catch (e) {
+          console.error('Failed to initialize FinovaAI', e);
+        }
+
+        input.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+
+          status.textContent = '🤖 Scanning... 0%';
+          status.style.color = 'var(--color-text-secondary)';
+
+          // Event progress listener untuk progress bar/text
+          const progressHandler = (event) => {
+            status.textContent = `🤖 Scanning... ${event.detail.progress}%`;
+          };
+          window.addEventListener('finova-scan-progress', progressHandler);
+
+          try {
+            // Jalankan scanning
+            const hasil = await FinovaAI.scan(file);
+            
+            // Isi form otomatis
+            const amountInput = document.querySelector('input[name="amount"]');
+            const dateInput = document.querySelector('input[name="date"]');
+            const notesInput = document.querySelector('input[name="notes"]');
+
+            if (amountInput) {
+              amountInput.value = hasil.total_ocr;
+            }
+            if (dateInput) {
+              dateInput.value = hasil.tanggal;
+            }
+            if (notesInput) {
+              notesInput.value = `Scan Struk [${hasil.currency}]`;
+            }
+
+            status.textContent = '✅ Scanned Successfully!';
+            status.style.color = '#10b981';
+          } catch (err) {
+            console.error('Scan error:', err);
+            status.textContent = '❌ Scan failed. Try again.';
+            status.style.color = '#ef4444';
+          } finally {
+            window.removeEventListener('finova-scan-progress', progressHandler);
+          }
+        });
+      });
+    </script>
   </body>
 </html>

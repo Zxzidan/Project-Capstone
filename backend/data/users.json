@@ -18,9 +18,10 @@
     "monthlyDebt": 2000000,
     "dtiRatio": "26.7%",
     "everDefaulted": "No",
-    "defaultCount": "",
-    "maritalStatusChange": "",
-    "onboarded": true
+    "defaultCount": "0",
+    "maritalStatusChange": "None",
+    "onboarded": true,
+    "savingGoal": 25000000
   },
   {
     "id": "1777638077420",

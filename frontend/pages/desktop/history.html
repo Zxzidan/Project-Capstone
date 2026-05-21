@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finova - Transaction History</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      /* Filter Controls Styling */
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-4);
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-6);
+        padding: var(--spacing-4) var(--spacing-6);
+      }
+      
+      .filter-tabs {
+        display: flex;
+        background: var(--color-surface-hover);
+        padding: 4px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-color);
+        gap: 4px;
+      }
+      
+      .tab-btn {
+        padding: var(--spacing-2) var(--spacing-4);
+        border-radius: var(--radius-md);
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        transition: all var(--transition-fast);
+      }
+      
+      .tab-btn:hover {
+        color: var(--color-text-primary);
+      }
+      
+      .tab-btn.active {
+        background: var(--color-surface);
+        color: var(--color-primary);
+        box-shadow: var(--shadow-sm);
+        font-weight: 600;
+      }
+      
+      .search-box {
+        position: relative;
+        min-width: 280px;
+        flex: 1;
+      }
+      
+      .search-input {
+        width: 100%;
+        padding: 0.625rem 1rem 0.625rem 2.5rem;
+        font-size: 0.95rem;
+      }
+      
+      .search-icon {
+        position: absolute;
+        left: 0.875rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--color-text-muted);
+        font-size: 1rem;
+        pointer-events: none;
+      }
+      
+      .category-filter {
+        width: 180px;
+      }
+      
+      /* Transaction Rows Styling */
+      .history-table-header {
+        display: grid;
+        grid-template-columns: 60px 1.5fr 2fr 1.2fr 1.2fr 1.5fr;
+        padding: var(--spacing-4) var(--spacing-6);
+        background: rgba(0, 0, 0, 0.02);
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+        letter-spacing: 0.05em;
+      }
+      
+      .history-list {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .history-row {
+        display: grid;
+        grid-template-columns: 60px 1.5fr 2fr 1.2fr 1.2fr 1.5fr;
+        padding: var(--spacing-4) var(--spacing-6);
+        border-bottom: 1px solid var(--border-color);
+        align-items: center;
+        transition: background var(--transition-fast);
+      }
+      
+      .history-row:last-child {
+        border-bottom: none;
+      }
+      
+      .history-row:hover {
+        background: var(--color-surface-hover);
+      }
+      
+      .t-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        box-shadow: var(--shadow-sm);
+      }
+      
+      .t-icon.income {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--color-accent);
+      }
+      
+      .t-icon.expense {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--color-danger);
+      }
+      
+      .t-category {
+        font-weight: 600;
+        color: var(--color-text-primary);
+      }
+      
+      .t-notes {
+        color: var(--color-text-secondary);
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .t-date {
+        color: var(--color-text-muted);
+        font-size: 0.85rem;
+      }
+      
+      .badge-type {
+        display: inline-flex;
+        padding: 0.25rem 0.625rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        width: fit-content;
+      }
+      
+      .badge-income {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--color-accent);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+      }
+      
+      .badge-expense {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--color-danger);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+      }
+      
+      .t-amount {
+        font-weight: 700;
+        font-size: 1rem;
+        text-align: right;
+      }
+      
+      .t-amount.income {
+        color: var(--color-accent);
+      }
+      
+      .t-amount.expense {
+        color: var(--color-danger);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h2 class="text-xl font-bold"><span class="text-gradient">Finova</span></h2>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="/pages/desktop/dashboard.html" class="nav-item">Dashboard</a>
+          <a href="/pages/desktop/insights.html" class="nav-item">Insights & Reports</a>
+          <a href="/pages/desktop/history.html" class="nav-item active">History</a>
+          <a href="/pages/desktop/add-transaction.html" class="nav-item">Add Transaction</a>
+          <a href="/pages/desktop/profile.html" class="nav-item">Profile</a>
+        </nav>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <h1 class="mb-2">Riwayat Transaksi</h1>
+            <p class="text-secondary">Pantau seluruh riwayat pemasukan dan pengeluaran Anda di sini.</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="/pages/desktop/add-transaction.html" class="btn btn-primary">+ New Transaction</a>
+            <div class="user-profile">
+              <div class="avatar">D</div>
+              <span>Dandi</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Setup Blocker / Empty State -->
+        <div id="historyEmptyState" class="glass-panel p-8 text-center animate-fade-in" style="display: none; max-width: 600px; margin: 4rem auto; padding: 3rem var(--spacing-6);">
+          <div style="font-size: 4rem; margin-bottom: var(--spacing-4);">🎯</div>
+          <h2 class="mb-4">Target Menabung Belum Diatur</h2>
+          <p class="text-secondary mb-6" style="font-size: 1.1rem; line-height: 1.6;">Untuk melihat riwayat transaksi dan mengelola cash flow Anda, silakan atur target menabung (Savings Goal) di profil Anda terlebih dahulu.</p>
+          <a href="/pages/desktop/profile.html" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem;">Set Target Menabung Sekarang</a>
+        </div>
+
+        <!-- History Content -->
+        <div class="animate-fade-in" id="historyContent">
+          
+          <!-- Filters Dashboard -->
+          <div class="glass-panel filter-bar">
+            <!-- Tabs (All, Income, Expense) -->
+            <div class="filter-tabs">
+              <button class="tab-btn active" id="tabAll">Semua</button>
+              <button class="tab-btn" id="tabIncome">Pemasukan</button>
+              <button class="tab-btn" id="tabExpense">Pengeluaran</button>
+            </div>
+            
+            <div class="flex items-center gap-4 flex-1 justify-end">
+              <!-- Search Bar -->
+              <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="historySearchInput" class="form-control search-input" placeholder="Cari catatan atau kategori..." />
+              </div>
+              
+              <!-- Category Filter -->
+              <select id="historyCategorySelect" class="form-control category-filter" style="padding: 0.5rem 2rem 0.5rem 1rem; font-size: 0.9rem;">
+                <option value="all">Semua Kategori</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Dining">Dining</option>
+                <option value="Transport">Transport</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Salary">Salary</option>
+                <option value="Investment">Investment</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Transaction List Panel -->
+          <div class="glass-panel" style="overflow: hidden;">
+            <div class="history-table-header">
+              <div>Ikon</div>
+              <div>Kategori</div>
+              <div>Catatan</div>
+              <div>Tanggal</div>
+              <div>Tipe</div>
+              <div style="text-align: right;">Jumlah</div>
+            </div>
+            
+            <div class="history-list" id="transactionHistoryList">
+              <!-- Dynamically populated rows -->
+            </div>
+          </div>
+          
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

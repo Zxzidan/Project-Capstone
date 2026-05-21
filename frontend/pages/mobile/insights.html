@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Finova - Insights</title>
     <link rel="stylesheet" href="/css/index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       .mobile-layout {
         max-width: 480px;
@@ -117,56 +118,71 @@
         
       </header>
 
-      <!-- Date Filter -->
-      <div class="flex justify-between items-center px-4 py-4" style="padding: var(--spacing-4);">
-        <h2 class="text-xl m-0">May 2026</h2>
+      <!-- Setup Blocker / Empty State -->
+      <div id="insightsEmptyState" class="glass-panel p-6 text-center animate-fade-in" style="display: none; margin: var(--spacing-4); padding: var(--spacing-8) var(--spacing-4);">
+        <div style="font-size: 3rem; margin-bottom: var(--spacing-3);">📊</div>
+        <h3 class="mb-2">Target Menabung Belum Diatur</h3>
+        <p class="text-secondary mb-4" style="font-size: 0.9rem; line-height: 1.5;">Silakan atur target menabung (Savings Goal) di profil Anda terlebih dahulu untuk mengaktifkan analisis keuangan.</p>
+        <a href="/pages/mobile/profile.html" class="btn btn-primary w-full" style="display: block; text-align: center;">Set Target Menabung</a>
+      </div>
+
+      <div id="insightsContent">
+        <!-- Date Filter -->
+        <div class="flex justify-between items-center px-4 py-4" style="padding: var(--spacing-4);">
+        <select id="monthSelector" style="background: transparent; border: none; font-size: 1.25rem; font-weight: bold; color: var(--color-text-primary); outline: none; cursor: pointer; appearance: none; padding-right: 1.5rem; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right center; background-size: 1rem;">
+          <option value="Mei 2026" style="background: var(--color-surface); color: var(--color-text-primary);">Mei 2026</option>
+          <option value="April 2026" style="background: var(--color-surface); color: var(--color-text-primary);">April 2026</option>
+          <option value="Maret 2026" style="background: var(--color-surface); color: var(--color-text-primary);">Maret 2026</option>
+        </select>
         <span class="badge badge-success">On Track</span>
       </div>
 
       <!-- Chart -->
-      <div class="chart-container">
-        <div class="chart-placeholder">
-          <span>[ Spending Chart Component ]</span>
-        </div>
+      <div class="chart-container" style="position: relative;">
+        <canvas id="spendingTrendsChart"></canvas>
       </div>
 
       <!-- Recommendations -->
       <h4 class="px-4 mt-6 mb-2" style="padding: 0 var(--spacing-4);">Recommendations</h4>
       
-      <div class="insight-card warning">
-        <div class="flex items-center gap-2 mb-2">
-          <span></span>
-          <span class="font-bold text-sm">High Dining Expense</span>
+      <div id="aiInsightsContainer">
+        <div class="insight-card warning">
+          <div class="flex items-center gap-2 mb-2">
+            <span></span>
+            <span class="font-bold text-sm">High Dining Expense</span>
+          </div>
+          <p class="text-sm text-secondary m-0">You've spent Rp 450.000 on dining out this month. That's 20% higher than your usual average. Consider cooking at home this weekend.</p>
         </div>
-        <p class="text-sm text-secondary m-0">You've spent Rp 450.000 on dining out this month. That's 20% higher than your usual average. Consider cooking at home this weekend.</p>
-      </div>
 
-      <div class="insight-card success">
-        <div class="flex items-center gap-2 mb-2">
-          <span></span>
-          <span class="font-bold text-sm">Subscription Optimized</span>
+        <div class="insight-card success">
+          <div class="flex items-center gap-2 mb-2">
+            <span></span>
+            <span class="font-bold text-sm">Subscription Optimized</span>
+          </div>
+          <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving Rp 45.000/month!</p>
         </div>
-        <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving Rp 45.000/month!</p>
-      </div>
 
-      <div class="insight-card">
-        <div class="flex items-center gap-2 mb-2">
-          <span style="color: var(--color-primary);"></span>
-          <span class="font-bold text-sm">Forecast: Looking Good</span>
+        <div class="insight-card">
+          <div class="flex items-center gap-2 mb-2">
+            <span style="color: var(--color-primary);"></span>
+            <span class="font-bold text-sm">Forecast: Looking Good</span>
+          </div>
+          <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra Rp 320.000 in savings.</p>
         </div>
-        <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra Rp 320.000 in savings.</p>
       </div>
       
       <div style="height: 40px;"></div> <!-- Extra padding -->
 
+      </div>
+
       <!-- Bottom Navigation -->
       <nav class="bottom-nav">
         <a href="/pages/mobile/dashboard.html" class="nav-item-mobile">
-          <span class="nav-icon"></span>
+          <span class="nav-icon">🏠</span>
           <span>Home</span>
         </a>
         <a href="/pages/mobile/insights.html" class="nav-item-mobile active">
-          <span class="nav-icon"></span>
+          <span class="nav-icon">📊</span>
           <span>Insights</span>
         </a>
         <a href="/pages/mobile/add-transaction.html" class="nav-item-mobile" style="transform: translateY(-10px);">
@@ -174,12 +190,12 @@
             <span class="nav-icon" style="color: var(--color-text-primary);">+</span>
           </div>
         </a>
-        <a href="#" class="nav-item-mobile">
-          <span class="nav-icon"></span>
-          <span>Cards</span>
+        <a href="/pages/mobile/history.html" class="nav-item-mobile">
+          <span class="nav-icon">⏱️</span>
+          <span>History</span>
         </a>
-        <a href="/index.html" class="nav-item-mobile">
-          <span class="nav-icon"></span>
+        <a href="/pages/mobile/profile.html" class="nav-item-mobile">
+          <span class="nav-icon">👤</span>
           <span>Settings</span>
         </a>
       </nav>

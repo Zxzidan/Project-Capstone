@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Finova - Insights</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       .mobile-layout {
         max-width: 480px;
@@ -105,8 +106,8 @@
         font-size: 1.5rem;
       }
     </style>
-    <script type="module" crossorigin src="/assets/app-ChYESuiU.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/app-DtuVMUl-.css">
+    <script type="module" crossorigin src="/assets/app-Cc8hLvQh.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Db4695YN.css">
   </head>
   <body>
     <div class="mobile-layout animate-fade-in">
@@ -120,42 +121,46 @@
 
       <!-- Date Filter -->
       <div class="flex justify-between items-center px-4 py-4" style="padding: var(--spacing-4);">
-        <h2 class="text-xl m-0">May 2026</h2>
+        <select id="monthSelector" style="background: transparent; border: none; font-size: 1.25rem; font-weight: bold; color: var(--color-text-primary); outline: none; cursor: pointer; appearance: none; padding-right: 1.5rem; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right center; background-size: 1rem;">
+          <option value="Mei 2026" style="background: var(--color-surface); color: var(--color-text-primary);">Mei 2026</option>
+          <option value="April 2026" style="background: var(--color-surface); color: var(--color-text-primary);">April 2026</option>
+          <option value="Maret 2026" style="background: var(--color-surface); color: var(--color-text-primary);">Maret 2026</option>
+        </select>
         <span class="badge badge-success">On Track</span>
       </div>
 
       <!-- Chart -->
-      <div class="chart-container">
-        <div class="chart-placeholder">
-          <span>[ Spending Chart Component ]</span>
-        </div>
+      <div class="chart-container" style="position: relative;">
+        <canvas id="spendingTrendsChart"></canvas>
       </div>
 
       <!-- Recommendations -->
       <h4 class="px-4 mt-6 mb-2" style="padding: 0 var(--spacing-4);">Recommendations</h4>
       
-      <div class="insight-card warning">
-        <div class="flex items-center gap-2 mb-2">
-          <span></span>
-          <span class="font-bold text-sm">High Dining Expense</span>
+      <div id="aiInsightsContainer">
+        <div class="insight-card warning">
+          <div class="flex items-center gap-2 mb-2">
+            <span></span>
+            <span class="font-bold text-sm">High Dining Expense</span>
+          </div>
+          <p class="text-sm text-secondary m-0">You've spent Rp 450.000 on dining out this month. That's 20% higher than your usual average. Consider cooking at home this weekend.</p>
         </div>
-        <p class="text-sm text-secondary m-0">You've spent Rp 450.000 on dining out this month. That's 20% higher than your usual average. Consider cooking at home this weekend.</p>
-      </div>
 
-      <div class="insight-card success">
-        <div class="flex items-center gap-2 mb-2">
-          <span></span>
-          <span class="font-bold text-sm">Subscription Optimized</span>
+        <div class="insight-card success">
+          <div class="flex items-center gap-2 mb-2">
+            <span></span>
+            <span class="font-bold text-sm">Subscription Optimized</span>
+          </div>
+          <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving Rp 45.000/month!</p>
         </div>
-        <p class="text-sm text-secondary m-0">You successfully canceled your unused gym membership, saving Rp 45.000/month!</p>
-      </div>
 
-      <div class="insight-card">
-        <div class="flex items-center gap-2 mb-2">
-          <span style="color: var(--color-primary);"></span>
-          <span class="font-bold text-sm">Forecast: Looking Good</span>
+        <div class="insight-card">
+          <div class="flex items-center gap-2 mb-2">
+            <span style="color: var(--color-primary);"></span>
+            <span class="font-bold text-sm">Forecast: Looking Good</span>
+          </div>
+          <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra Rp 320.000 in savings.</p>
         </div>
-        <p class="text-sm text-secondary m-0">Based on your current spending velocity, you are projected to end the month with an extra Rp 320.000 in savings.</p>
       </div>
       
       <div style="height: 40px;"></div> <!-- Extra padding -->

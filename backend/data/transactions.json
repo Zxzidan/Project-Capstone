@@ -28,5 +28,55 @@
     "date": "2026-05-13",
     "notes": "sangu",
     "createdAt": "2026-05-10T07:42:07.271Z"
+  },
+  {
+    "id": "1779367689447",
+    "userId": "1777637136329",
+    "amount": 70000,
+    "type": "Expense",
+    "category": "Makanan & Minuman",
+    "date": "2023-08-02",
+    "notes": "UPDATE",
+    "createdAt": "2026-05-21T12:48:09.447Z"
+  },
+  {
+    "id": "1779370544786",
+    "userId": "1777637136329",
+    "amount": 7500000,
+    "type": "Income",
+    "category": "Lainnya",
+    "date": "2026-05-21",
+    "notes": "Gaji",
+    "createdAt": "2026-05-21T13:35:44.786Z"
+  },
+  {
+    "id": "1779370772306",
+    "userId": "1777637136329",
+    "amount": 12000000,
+    "type": "Expense",
+    "category": "Belanja",
+    "date": "2026-05-22",
+    "notes": "TAS",
+    "createdAt": "2026-05-21T13:39:32.306Z"
+  },
+  {
+    "id": "1779371028374",
+    "userId": "1777637136329",
+    "amount": 20000000,
+    "type": "Income",
+    "category": "Lainnya",
+    "date": "2026-05-23",
+    "notes": "Tambahan",
+    "createdAt": "2026-05-21T13:43:48.374Z"
+  },
+  {
+    "id": "1779371087799",
+    "userId": "1777637136329",
+    "amount": 20000000,
+    "type": "Income",
+    "category": "Lainnya",
+    "date": "2026-05-24",
+    "notes": "tambahan",
+    "createdAt": "2026-05-21T13:44:47.799Z"
   }
 ]

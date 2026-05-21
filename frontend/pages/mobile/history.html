@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Finova - Riwayat</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+      .mobile-layout {
+        max-width: 480px;
+        margin: 0 auto;
+        min-height: 100vh;
+        background: var(--color-bg);
+        position: relative;
+        padding-bottom: 80px; /* Space for bottom nav */
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      }
+      
+      .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-4);
+        position: sticky;
+        top: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 10;
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 480px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        justify-content: space-around;
+        padding: var(--spacing-2) 0;
+        z-index: 100;
+        padding-bottom: calc(var(--spacing-2) + env(safe-area-inset-bottom, 0px));
+      }
+      
+      .nav-item-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--color-text-secondary);
+        font-size: 0.75rem;
+        gap: 4px;
+      }
+      
+      .nav-item-mobile.active {
+        color: var(--color-primary);
+      }
+      
+      .nav-icon {
+        font-size: 1.5rem;
+      }
+      
+      /* Filters & Search Control Styling on Mobile */
+      .mobile-filter-container {
+        padding: var(--spacing-4);
+        background: var(--color-surface);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-3);
+      }
+      
+      .mobile-search {
+        position: relative;
+      }
+      
+      .mobile-search-input {
+        width: 100%;
+        padding: 0.6rem 1rem 0.6rem 2.2rem;
+        font-size: 0.875rem;
+        background: var(--color-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+      }
+      
+      .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+      }
+      
+      .pills-container {
+        display: flex;
+        gap: var(--spacing-2);
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+      
+      .pill-btn {
+        padding: 6px 16px;
+        background: var(--color-bg);
+        border: 1px solid var(--border-color);
+        color: var(--color-text-secondary);
+        font-size: 0.8rem;
+        font-weight: 500;
+        border-radius: var(--radius-full);
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+      }
+      
+      .pill-btn.active {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+      }
+      
+      .mobile-history-list {
+        padding: var(--spacing-4);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-3);
+      }
+      
+      .t-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: var(--spacing-4);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all var(--transition-fast);
+      }
+      
+      .t-card:active {
+        background: var(--color-surface-hover);
+        transform: scale(0.98);
+      }
+      
+      .t-icon-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+      }
+      
+      .t-icon-box.income {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--color-accent);
+      }
+      
+      .t-icon-box.expense {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--color-danger);
+      }
+      
+      .t-info {
+        margin-left: var(--spacing-3);
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .t-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--color-text-primary);
+        margin-bottom: 2px;
+      }
+      
+      .t-note {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .t-meta {
+        font-size: 0.7rem;
+        color: var(--color-text-muted);
+        margin-top: 4px;
+      }
+      
+      .t-right {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+      }
+      
+      .t-val {
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+      
+      .t-val.income {
+        color: var(--color-accent);
+      }
+      
+      .t-val.expense {
+        color: var(--color-danger);
+      }
+      
+      .badge-type-mobile {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+      
+      .badge-income {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--color-accent);
+        border: 1px solid rgba(16, 185, 129, 0.15);
+      }
+      
+      .badge-expense {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--color-danger);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-layout animate-fade-in">
+      
+      <!-- Sticky Header -->
+      <header class="mobile-header">
+        <h3 style="margin: 0; font-weight: 700;">Riwayat Transaksi</h3>
+        <div class="user-profile" style="padding: 2px 8px; border-radius: var(--radius-full);">
+          <div class="avatar" style="width: 24px; height: 24px; font-size: 0.8rem;">D</div>
+        </div>
+      </header>
+
+      <!-- Setup Blocker / Empty State -->
+      <div id="historyEmptyState" class="glass-panel p-6 text-center animate-fade-in" style="display: none; margin: var(--spacing-4); padding: var(--spacing-8) var(--spacing-4);">
+        <div style="font-size: 3rem; margin-bottom: var(--spacing-3);">🎯</div>
+        <h3 class="mb-2">Target Menabung Belum Diatur</h3>
+        <p class="text-secondary mb-4" style="font-size: 0.9rem; line-height: 1.5;">Silakan atur target menabung (Savings Goal) di profil Anda terlebih dahulu untuk mengaktifkan riwayat transaksi.</p>
+        <a href="/pages/mobile/profile.html" class="btn btn-primary w-full" style="display: block; text-align: center;">Set Target Menabung</a>
+      </div>
+
+      <!-- History Content -->
+      <div id="historyContent">
+        
+        <!-- Search and Filters Panel -->
+        <div class="mobile-filter-container">
+          <!-- Search Bar -->
+          <div class="mobile-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="historySearchInput" class="mobile-search-input" placeholder="Cari catatan atau kategori..." />
+          </div>
+          
+          <!-- Filter Pills -->
+          <div class="pills-container">
+            <button class="pill-btn active" id="tabAll">Semua</button>
+            <button class="pill-btn" id="tabIncome">Pemasukan</button>
+            <button class="pill-btn" id="tabExpense">Pengeluaran</button>
+            
+            <!-- Dynamic Category Filter on Mobile using custom layout -->
+            <select id="historyCategorySelect" style="background: var(--color-bg); border: 1px solid var(--border-color); color: var(--color-text-secondary); font-size: 0.8rem; font-family: inherit; font-weight: 500; padding: 4px 10px; border-radius: var(--radius-full); outline: none;">
+              <option value="all">Semua Kategori</option>
+              <option value="Groceries">Groceries</option>
+              <option value="Dining">Dining</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Salary">Salary</option>
+              <option value="Investment">Investment</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- History List Container -->
+        <div class="mobile-history-list" id="transactionHistoryList">
+          <!-- Dynamically populated cards -->
+        </div>
+        
+      </div>
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav">
+        <a href="/pages/mobile/dashboard.html" class="nav-item-mobile">
+          <span class="nav-icon">🏠</span>
+          <span>Home</span>
+        </a>
+        <a href="/pages/mobile/insights.html" class="nav-item-mobile">
+          <span class="nav-icon">📊</span>
+          <span>Insights</span>
+        </a>
+        <a href="/pages/mobile/add-transaction.html" class="nav-item-mobile" style="transform: translateY(-10px);">
+          <div style="background: var(--color-primary); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-text-primary); box-shadow: 0 4px 10px rgba(59,130,246,0.5);">
+            <span class="nav-icon" style="color: var(--color-text-primary);">+</span>
+          </div>
+        </a>
+        <a href="/pages/mobile/history.html" class="nav-item-mobile active">
+          <span class="nav-icon">⏱️</span>
+          <span>History</span>
+        </a>
+        <a href="/pages/mobile/profile.html" class="nav-item-mobile">
+          <span class="nav-icon">👤</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+    </div>
+    <script type="module" src="/src/js/app.js"></script>
+  </body>
+</html>

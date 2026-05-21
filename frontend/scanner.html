@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finova AI - Smart Receipt Scanner</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <style>
+      :root {
+        --color-primary: #ff6633;
+        --color-primary-hover: #ff5520;
+        --color-bg-dark: #0f172a;
+        --color-surface-dark: rgba(30, 41, 59, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.08);
+      }
+
+      body {
+        font-family: 'Outfit', sans-serif;
+        background: radial-gradient(circle at top right, #1e1b4b, #0f172a 60%);
+        color: #f8fafc;
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .scanner-container {
+        max-width: 1000px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+        flex-grow: 1;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .glass-card {
+        background: var(--color-surface-dark);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .header-section {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .header-section h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin: 0 0 1rem 0;
+        background: linear-gradient(135deg, #ff8c42 0%, #ff6633 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -1px;
+      }
+
+      .header-section p {
+        color: #94a3b8;
+        font-size: 1.15rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      .grid-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 3rem;
+      }
+
+      @media (max-width: 768px) {
+        .grid-layout {
+          grid-template-columns: 1fr;
+        }
+        .header-section h1 {
+          font-size: 2.25rem;
+        }
+      }
+
+      /* Drag & Drop Area */
+      .upload-box {
+        border: 2px dashed rgba(255, 102, 51, 0.3);
+        border-radius: 20px;
+        padding: 4rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        background: rgba(255, 102, 51, 0.02);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 350px;
+      }
+
+      .upload-box:hover, .upload-box.dragover {
+        border-color: var(--color-primary);
+        background: rgba(255, 102, 51, 0.06);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(255, 102, 51, 0.05);
+      }
+
+      .upload-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        filter: drop-shadow(0 4px 12px rgba(255, 102, 51, 0.2));
+        transition: transform 0.3s ease;
+      }
+
+      .upload-box:hover .upload-icon {
+        transform: scale(1.1);
+      }
+
+      .upload-text {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #f1f5f9;
+        margin-bottom: 0.5rem;
+      }
+
+      .upload-subtext {
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      /* Preview Box with Moving Scanner Bar */
+      .preview-container {
+        display: none;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .preview-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: contain;
+        border-radius: 16px;
+        background: #020617;
+      }
+
+      /* Laser Scan Bar Animation */
+      .scanner-bar {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+        box-shadow: 0 0 12px var(--color-primary), 0 0 4px var(--color-primary);
+        z-index: 10;
+        animation: scanAnim 2.5s linear infinite;
+      }
+
+      @keyframes scanAnim {
+        0% { top: 0%; }
+        50% { top: 100%; }
+        100% { top: 0%; }
+      }
+
+      /* Overlay when processing */
+      .processing-overlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(4px);
+        z-index: 5;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255, 102, 51, 0.1);
+        border-top-color: var(--color-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1.5rem;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Results Section */
+      .results-card {
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .results-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #f1f5f9;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding-bottom: 0.75rem;
+      }
+
+      .result-item {
+        margin-bottom: 1.5rem;
+      }
+
+      .result-label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: #64748b;
+        letter-spacing: 1px;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .result-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      .result-value.amount {
+        color: #10b981;
+        font-size: 2rem;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #ff8c42 0%, #ff6633 100%);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(255, 102, 51, 0.3);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 102, 51, 0.4);
+        background: linear-gradient(135deg, #ff9e5d 0%, #ff7847 100%);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid var(--glass-border);
+        color: #94a3b8;
+        box-shadow: none;
+        margin-top: 1rem;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.03);
+        color: #f8fafc;
+        border-color: #cbd5e1;
+        transform: translateY(-1px);
+        box-shadow: none;
+      }
+
+      /* Raw Text Details */
+      .raw-text-container {
+        margin-top: 2rem;
+        background: #020617;
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        padding: 1rem;
+        max-height: 150px;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 0.8rem;
+        color: #64748b;
+        white-space: pre-wrap;
+      }
+
+      .badge {
+        background: rgba(255, 102, 51, 0.15);
+        color: var(--color-primary);
+        padding: 0.25rem 0.75rem;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 0.5rem;
+      }
+
+      .status-text {
+        font-size: 0.95rem;
+        color: #94a3b8;
+        margin-top: 0.5rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="flex justify-center items-center" style="background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid var(--glass-border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 1.25rem 2rem;">
+      <div class="container flex justify-between items-center w-full" style="max-width: 1000px;">
+        <a href="/" class="flex items-center gap-3" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem;">
+          <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #ff8c42 0%, #ff6633 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.35rem; box-shadow: 0 4px 12px rgba(255, 102, 51, 0.25);">F</div>
+          <span style="font-size: 1.6rem; font-weight: 800; letter-spacing: -1px; color: #f8fafc;">Finova <span style="color: var(--color-primary);">AI</span></span>
+        </a>
+        <a href="/pages/desktop/dashboard.html" class="btn btn-secondary" style="margin: 0; padding: 0.6rem 1.25rem; font-size: 0.9rem; border-radius: 8px;">Dashboard</a>
+      </div>
+    </nav>
+
+    <div class="scanner-container">
+      <div class="glass-card animate-fade-in">
+        
+        <div class="header-section">
+          <span class="badge">Powered by TensorFlow.js & Tesseract</span>
+          <h1>Smart Receipt Scanner</h1>
+          <p>Scan your receipt using Finova's local AI. Our client-side model reads dates, totals, and currencies with full privacy.</p>
+        </div>
+
+        <div class="grid-layout">
+          <!-- Left side: Upload area / scan preview -->
+          <div>
+            <div class="upload-box" id="dropzone">
+              <div class="processing-overlay" id="overlay">
+                <div class="spinner"></div>
+                <div class="upload-text" id="statusHeader">Analyzing Receipt...</div>
+                <div class="status-text" id="statusText">Initialing OCR engine...</div>
+              </div>
+              
+              <div id="uploadPrompt" style="display: flex; flex-direction: column; align-items: center;">
+                <div class="upload-icon">🧾</div>
+                <div class="upload-text">Upload or Drop Receipt Image</div>
+                <div class="upload-subtext">Supports PNG, JPG, or JPEG up to 10MB</div>
+                <button class="btn" style="margin-top: 1.5rem; width: auto; padding: 0.75rem 1.5rem;">Choose File</button>
+              </div>
+
+              <div class="preview-container" id="previewContainer">
+                <div class="scanner-bar" id="scannerBar"></div>
+                <img class="preview-image" id="previewImg" src="" alt="Receipt preview" />
+              </div>
+
+              <input type="file" accept="image/*" style="display: none;" id="receiptInput" />
+            </div>
+          </div>
+
+          <!-- Right side: Scanner output -->
+          <div class="results-card">
+            <div>
+              <div class="results-title">
+                <span>🤖</span> Extracted Transaction Details
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Total Amount</div>
+                <div class="result-value amount" id="resAmount">--</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Transaction Date</div>
+                <div class="result-value" id="resDate">--</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label">Detected Currency</div>
+                <div class="result-value" id="resCurrency">--</div>
+              </div>
+            </div>
+
+            <div>
+              <button class="btn" id="btnSave" style="display: none;">💾 Auto-fill into Transaction Form</button>
+              <button class="btn btn-secondary" id="btnReset" style="display: none;">Scan Another Receipt</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="raw-text-container" id="rawTextContainer" style="display: none;">
+          <!-- Raw OCR text will appear here -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="./js/finova-ai.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('receiptInput');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImg = document.getElementById('previewImg');
+        const scannerBar = document.getElementById('scannerBar');
+        const overlay = document.getElementById('overlay');
+        const statusText = document.getElementById('statusText');
+        const statusHeader = document.getElementById('statusHeader');
+        
+        const resAmount = document.getElementById('resAmount');
+        const resDate = document.getElementById('resDate');
+        const resCurrency = document.getElementById('resCurrency');
+        const rawTextContainer = document.getElementById('rawTextContainer');
+        const btnSave = document.getElementById('btnSave');
+        const btnReset = document.getElementById('btnReset');
+
+        let lastResult = null;
+
+        // A. Inisialisasi FinovaAI saat halaman dimuat
+        console.log('Page Load: Initializing FinovaAI...');
+        try {
+          await FinovaAI.init('./tfjs/model.json');
+        } catch (e) {
+          console.error('Failed to initialize FinovaAI', e);
+        }
+
+        // Setup custom event listeners for scanning status updates
+        window.addEventListener('finova-scan-start', () => {
+          overlay.style.display = 'flex';
+          scannerBar.style.display = 'block';
+          statusHeader.textContent = 'Reading Receipt...';
+          statusText.textContent = 'Performing Optical Character Recognition...';
+        });
+
+        window.addEventListener('finova-scan-progress', (e) => {
+          statusText.textContent = `Analyzing text and patterns... ${e.detail.progress}%`;
+        });
+
+        // Trigger file picker
+        dropzone.addEventListener('click', (e) => {
+          // Prevent infinite loop if clicking choose file button inside dropzone
+          if (e.target.tagName !== 'INPUT' && previewContainer.style.display !== 'block') {
+            fileInput.click();
+          }
+        });
+
+        // Drag and drop event handlers
+        dropzone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+          dropzone.classList.remove('dragover');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('dragover');
+          const file = e.dataTransfer.files[0];
+          if (file && file.type.startsWith('image/')) {
+            processFile(file);
+          }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            processFile(file);
+          }
+        });
+
+        async function processFile(file) {
+          // Render local preview immediately
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            previewImg.src = event.target.result;
+            uploadPrompt.style.display = 'none';
+            previewContainer.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+
+          try {
+            // B. Proses scan struk menggunakan FinovaAI
+            const result = await FinovaAI.scan(file);
+            lastResult = result;
+
+            // Render OCR Results
+            resAmount.textContent = result.currency + ' ' + result.total_ocr.toLocaleString('id-ID');
+            resDate.textContent = result.tanggal;
+            resCurrency.textContent = result.currency;
+
+            // Show raw details
+            rawTextContainer.textContent = "--- RAW TEXT EXTRACTED ---\n" + result.rawText;
+            rawTextContainer.style.display = 'block';
+
+            // Show buttons
+            btnSave.style.display = 'block';
+            btnReset.style.display = 'block';
+          } catch (err) {
+            console.error('Scan error:', err);
+            alert('Failed to scan receipt. Please ensure it is a clear receipt image.');
+            resetScanner();
+          } finally {
+            overlay.style.display = 'none';
+            scannerBar.style.display = 'none';
+          }
+        }
+
+        function resetScanner() {
+          fileInput.value = '';
+          previewImg.src = '';
+          uploadPrompt.style.display = 'flex';
+          previewContainer.style.display = 'none';
+          overlay.style.display = 'none';
+          scannerBar.style.display = 'none';
+          
+          resAmount.textContent = '--';
+          resDate.textContent = '--';
+          resCurrency.textContent = '--';
+          rawTextContainer.style.display = 'none';
+          
+          btnSave.style.display = 'none';
+          btnReset.style.display = 'none';
+          lastResult = null;
+        }
+
+        btnReset.addEventListener('click', resetScanner);
+
+        btnSave.addEventListener('click', () => {
+          if (lastResult) {
+            // Store scanned data in sessionStorage to auto-fill transaction form
+            sessionStorage.setItem('scannedReceipt', JSON.stringify(lastResult));
+            // Navigate to add transaction page
+            window.location.href = '/pages/desktop/add-transaction.html';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

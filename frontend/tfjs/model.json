@@ -1,0 +1,51 @@
+{
+  "format": "layers-model",
+  "generatedBy": "TensorFlow.js v4.17.0",
+  "convertedBy": null,
+  "modelTopology": {
+    "class_name": "Sequential",
+    "config": {
+      "name": "sequential_1",
+      "layers": [
+        {
+          "class_name": "Dense",
+          "config": {
+            "units": 1,
+            "activation": "linear",
+            "use_bias": true,
+            "kernel_initializer": {"class_name": "VarianceScaling", "config": {"scale": 1.0, "mode": "fan_avg", "distribution": "uniform", "seed": null}},
+            "bias_initializer": {"class_name": "Zeros", "config": {}},
+            "kernel_regularizer": null,
+            "bias_regularizer": null,
+            "activity_regularizer": null,
+            "kernel_constraint": null,
+            "bias_constraint": null,
+            "name": "dense_1",
+            "trainable": true,
+            "batch_input_shape": [null, 1],
+            "dtype": "float32"
+          }
+        }
+      ]
+    },
+    "keras_version": "2.2.4-tf",
+    "backend": "tensorflow"
+  },
+  "weightsManifest": [
+    {
+      "paths": ["group1-shard1.bin"],
+      "weights": [
+        {
+          "name": "dense_1/kernel",
+          "shape": [1, 1],
+          "dtype": "float32"
+        },
+        {
+          "name": "dense_1/bias",
+          "shape": [1],
+          "dtype": "float32"
+        }
+      ]
+    }
+  ]
+}

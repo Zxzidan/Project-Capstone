@@ -48,6 +48,7 @@
         <nav class="sidebar-nav">
           <a href="/pages/desktop/dashboard.html" class="nav-item">Dashboard</a>
           <a href="/pages/desktop/insights.html" class="nav-item">Insights & Reports</a>
+          <a href="/pages/desktop/history.html" class="nav-item">History</a>
           <a href="/pages/desktop/add-transaction.html" class="nav-item">Add Transaction</a>
           <a href="/pages/desktop/profile.html" class="nav-item active">Profile</a>
         </nav>
@@ -66,26 +67,172 @@
         </header>
 
         <div class="glass-panel p-8 profile-card animate-fade-in">
+          <div class="flex justify-between items-center mb-6" style="margin-bottom: var(--spacing-6); border-bottom: 1px solid var(--border-color); padding-bottom: var(--spacing-4);">
+            <h2 class="text-xl font-bold">Profil Keuangan</h2>
+            <div>
+              <button id="toggleEditBtn" class="btn btn-primary">Ubah Data</button>
+              <button id="cancelEditBtn" class="btn btn-secondary" style="display: none; margin-left: 8px;">Batal</button>
+            </div>
+          </div>
+
+          <!-- Read-only View -->
           <div class="profile-grid" id="profileDisplay">
-            <!-- Data will be loaded here -->
             <div style="grid-column: span 2; text-align: center; padding: 3rem;">
               <p class="text-secondary">Loading profile data...</p>
             </div>
           </div>
+
+          <!-- Edit Form (Hidden by default) -->
+          <form id="profileEditForm" style="display: none;">
+            <div class="profile-grid">
+              <div class="section-header">Informasi Pribadi</div>
+              
+              <div class="profile-item">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" name="name" class="form-control" required />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required readonly style="background: rgba(0,0,0,0.05); cursor: not-allowed;" />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Umur (Tahun)</label>
+                <input type="number" name="age" class="form-control" required />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Gender</label>
+                <select name="gender" class="form-control">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Tingkat Pendidikan</label>
+                <select name="education" class="form-control">
+                  <option value="High School">High School</option>
+                  <option value="Associate">Associate</option>
+                  <option value="Bachelor">Bachelor</option>
+                  <option value="Master">Master</option>
+                  <option value="PhD">PhD</option>
+                </select>
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Status Pernikahan</label>
+                <select name="maritalStatus" class="form-control">
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Divorced">Divorced</option>
+                  <option value="Widowed">Widowed</option>
+                </select>
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Jumlah Tanggungan</label>
+                <input type="number" name="dependents" class="form-control" required />
+              </div>
+
+              <div class="section-header">Pekerjaan & Pendapatan</div>
+              
+              <div class="profile-item">
+                <label class="form-label">Status Karyawan</label>
+                <select name="employmentStatus" class="form-control">
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Self-employed">Self-employed</option>
+                  <option value="Unemployed">Unemployed</option>
+                </select>
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Lama Bekerja (Tahun)</label>
+                <input type="number" name="tenure" class="form-control" required />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Penghasilan tiap bulan (Rp)</label>
+                <input type="text" name="monthlyIncome" class="form-control format-currency" required />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Nilai Aset yg dimiliki (Rp)</label>
+                <input type="text" name="assetValue" class="form-control format-currency" required />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Target Menabung (Saving Goal - Rp)</label>
+                <input type="text" name="savingGoal" class="form-control format-currency" required />
+              </div>
+
+              <div class="section-header">Pinjaman & Hutang</div>
+              
+              <div class="profile-item">
+                <label class="form-label">Jumlah Pinjaman (Rp)</label>
+                <input type="text" name="loanAmount" class="form-control format-currency" required />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Tujuan Pinjaman</label>
+                <input type="text" name="loanPurpose" class="form-control" />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Cicilan Hutang per bulan (Rp)</label>
+                <input type="text" name="monthlyDebt" class="form-control format-currency" required />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Pernah Gagal Bayar?</label>
+                <select name="everDefaulted" class="form-control">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Jumlah Gagal Bayar (kali)</label>
+                <input type="number" name="defaultCount" class="form-control" />
+              </div>
+              <div class="profile-item">
+                <label class="form-label">Perubahan Status Perkawinan</label>
+                <select name="maritalStatusChange" class="form-control">
+                  <option value="None">None</option>
+                  <option value="Married">Married</option>
+                  <option value="Divorced">Divorced</option>
+                  <option value="Widowed">Widowed</option>
+                </select>
+              </div>
+            </div>
+            
+            <div style="grid-column: span 2; display: flex; justify-content: flex-end; margin-top: var(--spacing-6);">
+              <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+          </form>
         </div>
       </main>
     </div>
 
     <script type="module">
-      import { app } from '/src/js/app.js';
+      import { api } from '/src/js/api.js';
       
       document.addEventListener('DOMContentLoaded', () => {
-        const user = JSON.parse(localStorage.getItem('currentUser'));
+        let user = JSON.parse(localStorage.getItem('currentUser'));
         const display = document.getElementById('profileDisplay');
+        const form = document.getElementById('profileEditForm');
+        const toggleBtn = document.getElementById('toggleEditBtn');
+        const cancelBtn = document.getElementById('cancelEditBtn');
         
-        if (user) {
-          const formatNum = (num) => 'Rp ' + (parseFloat(num) || 0).toLocaleString('id-ID');
+        function formatNum(num) {
+          return 'Rp ' + (parseFloat(num) || 0).toLocaleString('id-ID');
+        }
+
+        function formatCurrencyInput(value) {
+          const clean = value.replace(/\D/g, '');
+          if (!clean) return '';
+          return parseInt(clean, 10).toLocaleString('id-ID');
+        }
+
+        // Setup currency input formatter
+        document.querySelectorAll('.format-currency').forEach(input => {
+          input.addEventListener('input', (e) => {
+            e.target.value = formatCurrencyInput(e.target.value);
+          });
+        });
+
+        function populateUI() {
+          if (!user) return;
           
+          // Populate Read-only Display
           display.innerHTML = `
             <div class="section-header">Informasi Pribadi</div>
             <div class="profile-item">
@@ -134,6 +281,10 @@
               <div class="profile-label">Nilai Aset yg dimiliki</div>
               <div class="profile-value">${formatNum(user.assetValue)}</div>
             </div>
+            <div class="profile-item">
+              <div class="profile-label">Target Menabung (Saving Goal)</div>
+              <div class="profile-value" style="color: var(--color-primary); font-weight: bold;">${formatNum(user.savingGoal)}</div>
+            </div>
 
             <div class="section-header">Pinjaman & Hutang</div>
             <div class="profile-item">
@@ -161,7 +312,109 @@
               <div class="profile-value">${user.maritalStatusChange || '-'}</div>
             </div>
           `;
+
+          // Populate Form Inputs
+          form.name.value = user.name || '';
+          form.email.value = user.email || '';
+          form.age.value = user.age || '';
+          form.gender.value = user.gender || 'Male';
+          form.education.value = user.education || 'Bachelor';
+          form.maritalStatus.value = user.maritalStatus || 'Single';
+          form.dependents.value = user.dependents || '0';
+          form.employmentStatus.value = user.employmentStatus || 'Full-time';
+          form.tenure.value = user.tenure || '0';
+          
+          form.monthlyIncome.value = (user.monthlyIncome || 0).toLocaleString('id-ID');
+          form.assetValue.value = (user.assetValue || 0).toLocaleString('id-ID');
+          form.savingGoal.value = (user.savingGoal || 0).toLocaleString('id-ID');
+          form.loanAmount.value = (user.loanAmount || 0).toLocaleString('id-ID');
+          
+          form.loanPurpose.value = user.loanPurpose || '';
+          form.monthlyDebt.value = (user.monthlyDebt || 0).toLocaleString('id-ID');
+          form.everDefaulted.value = user.everDefaulted || 'No';
+          form.defaultCount.value = user.defaultCount || '0';
+          form.maritalStatusChange.value = user.maritalStatusChange || 'None';
         }
+
+        populateUI();
+
+        let isEditMode = false;
+        
+        toggleBtn.addEventListener('click', () => {
+          if (!isEditMode) {
+            // Switch to Edit Mode
+            display.style.display = 'none';
+            form.style.display = 'block';
+            toggleBtn.style.display = 'none';
+            cancelBtn.style.display = 'inline-block';
+            isEditMode = true;
+          }
+        });
+
+        cancelBtn.addEventListener('click', () => {
+          if (isEditMode) {
+            // Switch to Display Mode
+            display.style.display = 'grid';
+            form.style.display = 'none';
+            toggleBtn.style.display = 'inline-block';
+            cancelBtn.style.display = 'none';
+            isEditMode = false;
+            populateUI(); // Reset fields
+          }
+        });
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const profileData = {
+            name: form.name.value,
+            age: form.age.value,
+            gender: form.gender.value,
+            education: form.education.value,
+            maritalStatus: form.maritalStatus.value,
+            dependents: form.dependents.value,
+            employmentStatus: form.employmentStatus.value,
+            tenure: form.tenure.value,
+            monthlyIncome: parseFloat(form.monthlyIncome.value.replace(/\./g, '')) || 0,
+            assetValue: parseFloat(form.assetValue.value.replace(/\./g, '')) || 0,
+            savingGoal: parseFloat(form.savingGoal.value.replace(/\./g, '')) || 0,
+            loanAmount: parseFloat(form.loanAmount.value.replace(/\./g, '')) || 0,
+            loanPurpose: form.loanPurpose.value,
+            monthlyDebt: parseFloat(form.monthlyDebt.value.replace(/\./g, '')) || 0,
+            everDefaulted: form.everDefaulted.value,
+            defaultCount: form.defaultCount.value,
+            maritalStatusChange: form.maritalStatusChange.value
+          };
+
+          // Re-calculate DTI Ratio: monthlyDebt / monthlyIncome
+          const income = profileData.monthlyIncome || 1;
+          const dti = ((profileData.monthlyDebt / income) * 100).toFixed(1) + '%';
+          profileData.dtiRatio = dti;
+
+          try {
+            const res = await api.updateUserProfile(user.id, profileData);
+            const updatedUser = { ...user, ...res.user };
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+            user = updatedUser;
+            
+            // Re-render UI profile name in layout
+            const profileNames = document.querySelectorAll('.user-profile span');
+            profileNames.forEach(span => span.textContent = user.name || 'User');
+            
+            alert('Profil berhasil diperbarui!');
+            
+            // Revert to view mode
+            display.style.display = 'grid';
+            form.style.display = 'none';
+            toggleBtn.style.display = 'inline-block';
+            cancelBtn.style.display = 'none';
+            isEditMode = false;
+            
+            populateUI();
+          } catch (err) {
+            alert('Gagal memperbarui profil: ' + err.message);
+          }
+        });
       });
     </script>
     <script type="module" src="/src/js/app.js"></script>
