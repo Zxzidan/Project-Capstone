@@ -207,6 +207,13 @@ export const app = {
         this.loadInsightsData();
       });
     }
+
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    if (exportCsvBtn) {
+      exportCsvBtn.addEventListener('click', () => {
+        this.handleExportCsv();
+      });
+    }
   },
 
   async loadDashboardData() {
@@ -583,12 +590,83 @@ export const app = {
       const transactions = await api.getTransactions(this.user.id);
       
       const monthSelector = document.getElementById('monthSelector');
-      const selectedMonthText = monthSelector ? monthSelector.value : 'Mei 2026';
+      
+      // Dynamically populate the month selector if it hasn't been populated yet
+      const idMonths = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+      ];
+      const now = new Date();
+      
+      if (monthSelector && !monthSelector.dataset.populated) {
+        const uniqueMonths = new Set();
+        
+        // Add current month/year as default
+        uniqueMonths.add(`${now.getFullYear()}-${now.getMonth()}`);
+        
+        // Add months from transactions
+        transactions.forEach(t => {
+          if (t.date) {
+            const parts = t.date.split('-');
+            if (parts.length >= 2) {
+              const y = parseInt(parts[0]);
+              const m = parseInt(parts[1]) - 1;
+              if (!isNaN(y) && !isNaN(m) && m >= 0 && m <= 11) {
+                uniqueMonths.add(`${y}-${m}`);
+              }
+            }
+          }
+        });
+        
+        const sortedMonths = Array.from(uniqueMonths).map(mStr => {
+          const [y, m] = mStr.split('-').map(Number);
+          return { year: y, month: m };
+        }).sort((a, b) => {
+          if (a.year !== b.year) return b.year - a.year;
+          return b.month - a.month;
+        });
+        
+        // Save current value if any
+        const prevValue = monthSelector.value;
+        
+        monthSelector.innerHTML = '';
+        sortedMonths.forEach(m => {
+          const text = `${idMonths[m.month]} ${m.year}`;
+          const opt = document.createElement('option');
+          opt.value = text;
+          opt.textContent = text;
+          
+          const isMobile = window.location.pathname.includes('/mobile/');
+          if (isMobile) {
+            opt.style.background = 'var(--color-surface)';
+            opt.style.color = 'var(--color-text-primary)';
+          }
+          
+          monthSelector.appendChild(opt);
+        });
+        
+        monthSelector.dataset.populated = 'true';
+        
+        // Try to restore previous value or select the first/current month
+        const currentMonthText = `${idMonths[now.getMonth()]} ${now.getFullYear()}`;
+        if (prevValue && Array.from(monthSelector.options).some(o => o.value === prevValue)) {
+          monthSelector.value = prevValue;
+        } else if (Array.from(monthSelector.options).some(o => o.value === currentMonthText)) {
+          monthSelector.value = currentMonthText;
+        } else if (monthSelector.options.length > 0) {
+          monthSelector.selectedIndex = 0;
+        }
+      }
+
+      const selectedMonthText = monthSelector ? monthSelector.value : `${idMonths[now.getMonth()]} ${now.getFullYear()}`;
+      
+      // Store current selected month text for export
+      this.currentSelectedMonthText = selectedMonthText;
       
       // Parse month and year from string e.g. "Mei 2026"
       const parts = selectedMonthText.split(' ');
       const monthStr = parts[0].toLowerCase();
-      const year = parseInt(parts[1]) || new Date().getFullYear();
+      const year = parseInt(parts[1]) || now.getFullYear();
       
       const monthsMap = {
         'januari': 0, 'jan': 0, 'january': 0,
@@ -604,7 +682,7 @@ export const app = {
         'november': 10, 'nov': 10,
         'desember': 11, 'des': 11, 'december': 11, 'dec': 11
       };
-      const month = monthsMap[monthStr] !== undefined ? monthsMap[monthStr] : new Date().getMonth();
+      const month = monthsMap[monthStr] !== undefined ? monthsMap[monthStr] : now.getMonth();
 
       // Filter transactions for the selected month/year
       const filteredTransactions = transactions.filter(t => {
@@ -614,6 +692,37 @@ export const app = {
         const tMonth = parseInt(tDateParts[1]) - 1;
         return tYear === year && tMonth === month;
       });
+
+      this.currentFilteredTransactions = filteredTransactions;
+
+      // Update Desktop Subheader text to match the selected month
+      const subheader = document.querySelector('.topbar p.text-secondary');
+      if (subheader) {
+        subheader.textContent = `Smart financial reports for ${selectedMonthText}`;
+      }
+
+      // Update Mobile Badge status
+      const statusBadge = document.querySelector('.flex.justify-between.items-center.px-4.py-4 .badge');
+      if (statusBadge) {
+        let monthIncome = 0;
+        let monthExpense = 0;
+        filteredTransactions.forEach(t => {
+          if (t.type === 'Income') monthIncome += t.amount;
+          else monthExpense += t.amount;
+        });
+        const monthBalance = monthIncome - monthExpense;
+
+        if (monthBalance < 0) {
+          statusBadge.textContent = 'Defisit';
+          statusBadge.className = 'badge badge-danger';
+        } else if (monthBalance >= savingGoal) {
+          statusBadge.textContent = 'Target Tercapai';
+          statusBadge.className = 'badge badge-success';
+        } else {
+          statusBadge.textContent = 'On Track';
+          statusBadge.className = 'badge badge-success';
+        }
+      }
 
       // 1. Render Spending Trends vs Average Line Chart
       this.renderSpendingTrendsChart(transactions, selectedMonthText);
@@ -1072,6 +1181,52 @@ export const app = {
     } catch (error) {
       console.error('Failed to load history data:', error);
     }
+  },
+
+  handleExportCsv() {
+    if (!this.currentFilteredTransactions || this.currentFilteredTransactions.length === 0) {
+      alert('Tidak ada transaksi untuk diekspor pada bulan ini.');
+      return;
+    }
+    this.exportToCSV(this.currentFilteredTransactions, this.currentSelectedMonthText);
+  },
+
+  exportToCSV(transactions, monthText) {
+    // Define CSV header
+    const headers = ['Tanggal', 'Tipe', 'Kategori', 'Jumlah (Rp)', 'Catatan'];
+
+    // Map transactions to CSV rows
+    const rows = transactions.map(t => {
+      const typeText = t.type === 'Income' ? 'Pemasukan' : 'Pengeluaran';
+      const cleanNotes = (t.notes || '').replace(/"/g, '""'); // Escape double quotes
+      return [
+        t.date,
+        typeText,
+        t.category,
+        t.amount,
+        `"${cleanNotes}"`
+      ];
+    });
+
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    // Create a Blob and trigger download
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' }); // Add BOM for Excel compatibility
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    
+    // Generate clean filename
+    const filename = `Laporan_Keuangan_Finova_${monthText.replace(/\s+/g, '_')}.csv`;
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 };
 
